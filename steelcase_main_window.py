@@ -10,10 +10,9 @@
 import sys
 from PyQt4 import QtCore, QtGui
 from steelcase_main_window_ui import Ui_steelcase_main_window
-from steelcase_pw_widget import Pw_widget
 from steelcase_pw_dialog import Pw_dialog
-from steelcase_cpw_widget import Cpw_widget
-from steelcase_cpfc_widget import Cpfc_widget
+from steelcase_cpw_dialog import Cpw_dialog
+from steelcase_cpfc_dialog import Cpfc_dialog
 from steelcase_cop_dialog import Cop_dialog
 from steelcase_worker import Worker
 from steelcase_data_management import Data_management
@@ -21,7 +20,7 @@ from steelcase_data_management import Data_management
 class Main_window(QtGui.QMainWindow):
     """ Start_steelcase class. This class is used to setup the GUI/
         manage GUI event handeling. Start_steelcase inherites from
-        QtGui.QWidget.
+        QtGui.Qdialog.
     """
 
     def __init__(self):
@@ -63,13 +62,13 @@ class Main_window(QtGui.QMainWindow):
         # QThread instance
         self.thread = QtCore.QThread()
 
-        # Pw_widget instance
+        # Pw_dialog instance
         self.ui_pw = Pw_dialog()
 
-        # Cpfc_widget instance
-        self.ui_cpfc = Cpfc_widget()
+        # Cpfc_dialog instance
+        self.ui_cpfc = Cpfc_dialog()
 
-        # Update the cpfc line edit in the main widget
+        # Update the cpfc line edit in the main dialog
         self.ui.current_pfc_line_edit.setText(self.ui_cpfc.current_pfc)
 
         # Delete self.ui_cpfc
@@ -185,7 +184,7 @@ class Main_window(QtGui.QMainWindow):
         self.ui.start_push_button.setText(text_options[status])
 
     def update_status(self, status):
-        """Method to update the status displayed on the widget.
+        """Method to update the status displayed on the dialog.
             Requires running/pass/fail status as a input.
         """
 
@@ -212,77 +211,82 @@ class Main_window(QtGui.QMainWindow):
         self.ui.status_line_edit.setStyleSheet(bc_options[status])
 
     def start_cpfc(self):
-        """Method to make connections and show the password widget
-            before starting the change pass/fail criteria widget.
+        """Method to make connections and show the password dialog
+            before starting the change pass/fail criteria dialog.
         """
 
-        # Connect ui_pw's password match() signal to self.start_cpfc_widget
+        # Connect ui_pw's password match() signal to self.start_cpfc_dialog
         QtCore.QObject.connect(self.ui_pw,
                                QtCore.SIGNAL("match()"),
-                               self.start_cpfc_widget)
+                               self.start_cpfc_dialog)
 
         # Upon ui_pw finished() signal, undo the above connection
         QtCore.QObject.connect(self.ui_pw,
-                               QtCore.SIGNAL("finished()"),
+                               QtCore.SIGNAL("finished(int)"),
                                lambda: QtCore.QObject.disconnect(self.ui_pw,
                                                                  QtCore.SIGNAL("match()"),
-                                                                 self.start_cpfc_widget))
+                                                                 self.start_cpfc_dialog))
 
-        # Show the pw widget
+        # Show the pw dialog
         self.ui_pw.show()
 
-    def start_cpfc_widget(self):
-        """ Method to start the change pass/fail criteria (cpfc) widget. """
+    def start_cpfc_dialog(self):
+        """ Method to start the change pass/fail criteria (cpfc) dialog. """
 
-        # Cpfc_widget instance
-        self.ui_cpfc = Cpfc_widget()
+        # Cpfc_dialog instance
+        self.ui_cpfc = Cpfc_dialog()
 
         QtCore.QObject.connect(self.ui_cpfc,
-                               QtCore.SIGNAL("finished()"),
+                               QtCore.SIGNAL("finished(int)"),
                                lambda: self.ui.current_pfc_line_edit.setText(self.ui_cpfc.current_pfc))
 
         QtCore.QObject.connect(self.ui_cpfc,
-                               QtCore.SIGNAL("finished()"),
+                               QtCore.SIGNAL("finished(int)"),
                                lambda: self.delete(self.ui_cpfc))
 
-        # Show the cpfc widget
+        # Show the cpfc dialog
         self.ui_cpfc.show()
 
+
+    def test(self):
+
+        print("called")
+
     def start_cpw(self):
-        """ Method to make connections and show the password widget
-            before starting the change password (cpw) widget.
+        """ Method to make connections and show the password dialog
+            before starting the change password (cpw) dialog.
         """
 
-        # Connect ui_pw's password match() signal to self.start_cpw_widget
+        # Connect ui_pw's password match() signal to self.start_Cpw_dialog
         QtCore.QObject.connect(self.ui_pw,
                                QtCore.SIGNAL("match()"),
-                               self.start_cpw_widget)
+                               self.start_Cpw_dialog)
 
         # Upon ui_pw finished() signal, undo the above connection
         QtCore.QObject.connect(self.ui_pw,
-                               QtCore.SIGNAL("finished()"),
+                               QtCore.SIGNAL("finished(int)"),
                                lambda: QtCore.QObject.disconnect(self.ui_pw,
                                                                  QtCore.SIGNAL("match()"),
-                                                                 self.start_cpw_widget))
+                                                                 self.start_Cpw_dialog))
 
-        # Show the pw widget
+        # Show the pw dialog
         self.ui_pw.show()
 
-    def start_cpw_widget(self):
-        """ Method to start the change password (cpw) widget. """
+    def start_Cpw_dialog(self):
+        """ Method to start the change password (cpw) dialog. """
 
-        # Cpw_widget instance
-        self.ui_cpw = Cpw_widget()
+        # Cpw_dialog instance
+        self.ui_cpw = Cpw_dialog()
 
         QtCore.QObject.connect(self.ui_cpw,
-                               QtCore.SIGNAL("finished()"),
+                               QtCore.SIGNAL("finished(int)"),
                                lambda: self.delete(self.ui_cpw))
 
-        # Show to cpw widget
+        # Show to cpw dialog
         self.ui_cpw.show()
 
     def start_cop(self):
-        """ Method to make connections and show the password widget
+        """ Method to make connections and show the password dialog
             before starting the change output path (cop) dialog.
         """
 
@@ -293,12 +297,12 @@ class Main_window(QtGui.QMainWindow):
 
         # Upon ui_pw finished() signal, undo the above connection
         QtCore.QObject.connect(self.ui_pw,
-                               QtCore.SIGNAL("finished()"),
+                               QtCore.SIGNAL("finished(int)"),
                                lambda: QtCore.QObject.disconnect(self.ui_pw,
                                                                  QtCore.SIGNAL("match()"),
                                                                  self.start_cop_dialog))
 
-        # Show the pw widget
+        # Show the pw dialog
         self.ui_pw.show()
 
 
@@ -310,7 +314,7 @@ class Main_window(QtGui.QMainWindow):
 
         # Connect self.ui_cop_dialog's finished() signal to self.delete
         QtCore.QObject.connect(self.ui_cop_dialog,
-                               QtCore.SIGNAL("finished()"),
+                               QtCore.SIGNAL("finished(int)"),
                                lambda: self.delete(self.ui_cop_dialog))
 
         # Show the cop dialog

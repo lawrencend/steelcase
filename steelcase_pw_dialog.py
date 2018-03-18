@@ -24,8 +24,6 @@ class Pw_dialog(QtGui.QDialog):
 
         self.ph = argon2.PasswordHasher()
 
-        #self.ui.closeEvent = self.closeEvent
-
     def accept(self):
 
         with open(".steelcase_pw", "r") as file:
