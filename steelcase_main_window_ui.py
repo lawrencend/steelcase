@@ -121,9 +121,12 @@ class Ui_steelcase_main_window(object):
         self.action_change_pass_fail_force_criteria.setObjectName(_fromUtf8("action_change_pass_fail_force_criteria"))
         self.action_change_Password = QtGui.QAction(steelcase_main_window)
         self.action_change_Password.setObjectName(_fromUtf8("action_change_Password"))
+        self.action_change_output_path = QtGui.QAction(steelcase_main_window)
+        self.action_change_output_path.setObjectName(_fromUtf8("action_change_output_path"))
         self.menuSettings.addAction(self.action_enter_calibration_mode)
         self.menuSettings.addAction(self.action_change_pass_fail_force_criteria)
         self.menuSettings.addAction(self.action_change_Password)
+        self.menuSettings.addAction(self.action_change_output_path)
         self.menubar.addAction(self.menuSettings.menuAction())
 
         self.retranslateUi(steelcase_main_window)
@@ -138,4 +141,5 @@ class Ui_steelcase_main_window(object):
         self.action_enter_calibration_mode.setText(_translate("steelcase_main_window", "Enter calibration mode...", None))
         self.action_change_pass_fail_force_criteria.setText(_translate("steelcase_main_window", "Change Pass/Fail Force Criteria...", None))
         self.action_change_Password.setText(_translate("steelcase_main_window", "Change Password...", None))
+        self.action_change_output_path.setText(_translate("steelcase_main_window", "Change Output Path...", None))
 

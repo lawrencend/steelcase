@@ -104,7 +104,7 @@ class Data_management(object):
 		file_name = date + ".csv"
 
 		# Directory path
-		self.dir_path = "~/Desktop/test_data/" + date
+		self.dir_path = "/home/lawrencend/Desktop/test_data/" + date
 
 		# File path
 		self.file_path = self.dir_path + "/" + file_name

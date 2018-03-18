@@ -182,6 +182,7 @@
     <addaction name="action_enter_calibration_mode"/>
     <addaction name="action_change_pass_fail_force_criteria"/>
     <addaction name="action_change_Password"/>
+    <addaction name="action_change_output_path"/>
    </widget>
    <addaction name="menuSettings"/>
   </widget>
@@ -199,6 +200,11 @@
   <action name="action_change_Password">
    <property name="text">
     <string>Change Password...</string>
+   </property>
+  </action>
+  <action name="action_change_output_path">
+   <property name="text">
+    <string>Change Output Path...</string>
    </property>
   </action>
  </widget>

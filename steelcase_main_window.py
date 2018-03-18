@@ -11,8 +11,10 @@ import sys
 from PyQt4 import QtCore, QtGui
 from steelcase_main_window_ui import Ui_steelcase_main_window
 from steelcase_pw_widget import Pw_widget
+from steelcase_pw_dialog import Pw_dialog
 from steelcase_cpw_widget import Cpw_widget
 from steelcase_cpfc_widget import Cpfc_widget
+from steelcase_cop_dialog import Cop_dialog
 from steelcase_worker import Worker
 from steelcase_data_management import Data_management
 
@@ -52,12 +54,17 @@ class Main_window(QtGui.QMainWindow):
 
         QtCore.QObject.connect(self.ui.action_change_Password,
                                QtCore.SIGNAL("triggered()"),
-                               self.start_cpw)   
+                               self.start_cpw)
+
+        QtCore.QObject.connect(self.ui.action_change_output_path,
+                               QtCore.SIGNAL("triggered()"),
+                               self.start_cop)
+
         # QThread instance
         self.thread = QtCore.QThread()
 
         # Pw_widget instance
-        self.ui_pw = Pw_widget()
+        self.ui_pw = Pw_dialog()
 
         # Cpfc_widget instance
         self.ui_cpfc = Cpfc_widget()
@@ -214,9 +221,9 @@ class Main_window(QtGui.QMainWindow):
                                QtCore.SIGNAL("match()"),
                                self.start_cpfc_widget)
 
-        # Upon ui_pw close() signal, undo the above connection
+        # Upon ui_pw finished() signal, undo the above connection
         QtCore.QObject.connect(self.ui_pw,
-                               QtCore.SIGNAL("close()"),
+                               QtCore.SIGNAL("finished()"),
                                lambda: QtCore.QObject.disconnect(self.ui_pw,
                                                                  QtCore.SIGNAL("match()"),
                                                                  self.start_cpfc_widget))
@@ -231,11 +238,11 @@ class Main_window(QtGui.QMainWindow):
         self.ui_cpfc = Cpfc_widget()
 
         QtCore.QObject.connect(self.ui_cpfc,
-                               QtCore.SIGNAL("close()"),
+                               QtCore.SIGNAL("finished()"),
                                lambda: self.ui.current_pfc_line_edit.setText(self.ui_cpfc.current_pfc))
 
         QtCore.QObject.connect(self.ui_cpfc,
-                               QtCore.SIGNAL("close()"),
+                               QtCore.SIGNAL("finished()"),
                                lambda: self.delete(self.ui_cpfc))
 
         # Show the cpfc widget
@@ -251,9 +258,9 @@ class Main_window(QtGui.QMainWindow):
                                QtCore.SIGNAL("match()"),
                                self.start_cpw_widget)
 
-        # Upon ui_pw close() signal, undo the above connection
+        # Upon ui_pw finished() signal, undo the above connection
         QtCore.QObject.connect(self.ui_pw,
-                               QtCore.SIGNAL("close()"),
+                               QtCore.SIGNAL("finished()"),
                                lambda: QtCore.QObject.disconnect(self.ui_pw,
                                                                  QtCore.SIGNAL("match()"),
                                                                  self.start_cpw_widget))
@@ -268,17 +275,49 @@ class Main_window(QtGui.QMainWindow):
         self.ui_cpw = Cpw_widget()
 
         QtCore.QObject.connect(self.ui_cpw,
-                               QtCore.SIGNAL("close()"),
-                               lambda: self.delete(self.ui_cpw))
-
-        QtCore.QObject.connect(self.ui_cpw,
-                               QtCore.SIGNAL("close()"),
+                               QtCore.SIGNAL("finished()"),
                                lambda: self.delete(self.ui_cpw))
 
         # Show to cpw widget
         self.ui_cpw.show()
 
+    def start_cop(self):
+        """ Method to make connections and show the password widget
+            before starting the change output path (cop) dialog.
+        """
+
+        # Connect ui_pw's password match() signal to self.start_cop_dialog
+        QtCore.QObject.connect(self.ui_pw,
+                               QtCore.SIGNAL("match()"),
+                               self.start_cop_dialog)
+
+        # Upon ui_pw finished() signal, undo the above connection
+        QtCore.QObject.connect(self.ui_pw,
+                               QtCore.SIGNAL("finished()"),
+                               lambda: QtCore.QObject.disconnect(self.ui_pw,
+                                                                 QtCore.SIGNAL("match()"),
+                                                                 self.start_cop_dialog))
+
+        # Show the pw widget
+        self.ui_pw.show()
+
+
+    def start_cop_dialog(self):
+        """Method to start the change output path (cop) dialog. """
+
+        # Cop_dialog instance
+        self.ui_cop_dialog = Cop_dialog()
+
+        # Connect self.ui_cop_dialog's finished() signal to self.delete
+        QtCore.QObject.connect(self.ui_cop_dialog,
+                               QtCore.SIGNAL("finished()"),
+                               lambda: self.delete(self.ui_cop_dialog))
+
+        # Show the cop dialog
+        self.ui_cop_dialog.show()
+
     def delete(self, obj):
         """ Method to delete an object. """
 
+        # Delete the object
         del obj
