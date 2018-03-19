@@ -1,8 +1,15 @@
+"""
+    Written by: Nathan Lawrence
+    On: 3/18/2018
+    Email: Nathan@LawrenceAerospace.com
+
+    This module provides a class, Pw_dialog, to create !@#
+"""
+
 from PyQt4 import QtCore, QtGui
 import time
 import argon2
 from steelcase_pw_dialog_ui import Ui_steelcase_pw_dialog
-#from steelcase_cpw_widget_ui import Ui_steelcase_cpw_widget
 
 class Pw_dialog(QtGui.QDialog):
 
@@ -28,7 +35,7 @@ class Pw_dialog(QtGui.QDialog):
 
         with open(".steelcase_pw", "r") as file:
 
-            pw_hash = file.read()
+            pw_hash = file.readline()
 
         pw = self.ui.pw_line_edit.text()
 
@@ -50,6 +57,7 @@ class Pw_dialog(QtGui.QDialog):
 
         else:
 
+            self.lockout_time = time.time()
             self.ui.pw_line_edit.setEnabled(False)
             self.ui.pw_line_edit.setText("Locked! Too many attempts!")
             self.ui.buttonBox.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)

@@ -9,6 +9,7 @@
 """
 import sys
 from PyQt4 import QtCore, QtGui
+from pathlib import Path
 from steelcase_main_window_ui import Ui_steelcase_main_window
 from steelcase_pw_dialog import Pw_dialog
 from steelcase_cpw_dialog import Cpw_dialog
@@ -66,13 +67,13 @@ class Main_window(QtGui.QMainWindow):
         self.ui_pw = Pw_dialog()
 
         # Cpfc_dialog instance
-        self.ui_cpfc = Cpfc_dialog()
+        self.ui_cpfc_dialog = Cpfc_dialog()
 
         # Update the cpfc line edit in the main dialog
-        self.ui.current_pfc_line_edit.setText(self.ui_cpfc.current_pfc)
+        self.ui.current_pfc_line_edit.setText(self.ui_cpfc_dialog.current_pfc)
 
-        # Delete self.ui_cpfc
-        self.delete(self.ui_cpfc)
+        # Delete self.ui_cpfc_dialog
+        self.delete(self.ui_cpfc_dialog)
 
         # Data_management instance
         self.data_man = Data_management()
@@ -135,11 +136,6 @@ class Main_window(QtGui.QMainWindow):
                                QtCore.SIGNAL("finished()"),
                                self.stop_thread)
 
-        # Connect self.worker finished() signal to self.data_man.complete_test
-        QtCore.QObject.connect(self.worker,
-                               QtCore.SIGNAL("finished()"),
-                               self.data_man.complete_test)
-
         # Connect self.worker finished() signal to self.stop_thread
         QtCore.QObject.connect(self.worker.load_cell,
                                QtCore.SIGNAL("pass()"),
@@ -168,6 +164,7 @@ class Main_window(QtGui.QMainWindow):
         # Wait for the thread to quit
         self.thread.wait()
 
+        # Complete the test by logging data
         self.data_man.complete_test()
 
     def update_button(self, status):
@@ -234,45 +231,40 @@ class Main_window(QtGui.QMainWindow):
         """ Method to start the change pass/fail criteria (cpfc) dialog. """
 
         # Cpfc_dialog instance
-        self.ui_cpfc = Cpfc_dialog()
+        self.ui_cpfc_dialog = Cpfc_dialog()
 
-        QtCore.QObject.connect(self.ui_cpfc,
+        QtCore.QObject.connect(self.ui_cpfc_dialog,
                                QtCore.SIGNAL("finished(int)"),
-                               lambda: self.ui.current_pfc_line_edit.setText(self.ui_cpfc.current_pfc))
+                               lambda: self.ui.current_pfc_line_edit.setText(self.ui_cpfc_dialog.current_pfc))
 
-        QtCore.QObject.connect(self.ui_cpfc,
+        QtCore.QObject.connect(self.ui_cpfc_dialog,
                                QtCore.SIGNAL("finished(int)"),
-                               lambda: self.delete(self.ui_cpfc))
+                               lambda: self.delete(self.ui_cpfc_dialog))
 
         # Show the cpfc dialog
-        self.ui_cpfc.show()
-
-
-    def test(self):
-
-        print("called")
+        self.ui_cpfc_dialog.show()
 
     def start_cpw(self):
         """ Method to make connections and show the password dialog
             before starting the change password (cpw) dialog.
         """
 
-        # Connect ui_pw's password match() signal to self.start_Cpw_dialog
+        # Connect ui_pw's password match() signal to self.start_cpw_dialog
         QtCore.QObject.connect(self.ui_pw,
                                QtCore.SIGNAL("match()"),
-                               self.start_Cpw_dialog)
+                               self.start_cpw_dialog)
 
         # Upon ui_pw finished() signal, undo the above connection
         QtCore.QObject.connect(self.ui_pw,
                                QtCore.SIGNAL("finished(int)"),
                                lambda: QtCore.QObject.disconnect(self.ui_pw,
                                                                  QtCore.SIGNAL("match()"),
-                                                                 self.start_Cpw_dialog))
+                                                                 self.start_cpw_dialog))
 
         # Show the pw dialog
         self.ui_pw.show()
 
-    def start_Cpw_dialog(self):
+    def start_cpw_dialog(self):
         """ Method to start the change password (cpw) dialog. """
 
         # Cpw_dialog instance
@@ -320,8 +312,86 @@ class Main_window(QtGui.QMainWindow):
         # Show the cop dialog
         self.ui_cop_dialog.show()
 
+    def configure(self):
+        """Method to configure the application upon first run.
+            Sets user password and output path.
+        """
+
+        # Path to check
+        path = Path(".steelcase_configured")
+
+        # See if file exists
+        if not path.is_file():
+
+            # Message box success notification
+            msg = QtGui.QMessageBox()
+            msg.setIcon(QtGui.QMessageBox.Critical)
+            msg.setWindowTitle("Hi There!")
+            msg.setText("Glad to have you as a first time user...")
+            msg.setInformativeText("We need you to set your password and output path before using the application.")
+            msg.exec_()
+
+            # Cpw_dialog instance
+            self.ui_cpw_dialog = Cpw_dialog()
+    
+            # Cop_dialog instance
+            self.ui_cop_dialog = Cop_dialog()
+    
+            # Cpfc_dialog instance
+            self.ui_cpfc_dialog_dialog = Cpfc_dialog()
+
+
+            QtCore.QObject.connect(self.ui_cpw_dialog,
+                                   QtCore.SIGNAL("finished(int)"),
+                                   self.ui_cop_dialog.show)
+
+            QtCore.QObject.connect(self.ui_cop_dialog,
+                                   QtCore.SIGNAL("finished(int)"),
+                                   self.ui_cpfc_dialog.show)
+ 
+            QtCore.QObject.connect(self.ui_cop_dialog,
+                                   QtCore.SIGNAL("finished(int)"),
+                                   self.showMaximized)
+
+
+            QtCore.QObject.connect(self.ui_cpw_dialog,
+                                   QtCore.SIGNAL("finished(int)"),
+                                   lambda: self.delete(self.ui_cpw_dialog))
+
+            # Connect self.ui_cop_dialog's finished() signal to self.delete
+            QtCore.QObject.connect(self.ui_cop_dialog,
+                                   QtCore.SIGNAL("finished(int)"),
+                                   lambda: self.delete(self.ui_cop_dialog))
+
+            QtCore.QObject.connect(self.ui_cpfc_dialog,
+                                   QtCore.SIGNAL("finished(int)"),
+                                   lambda: self.delete(self.ui_cpfc_dialog))
+
+
+
+            f = open(".steelcase_configured", "w+")
+            f.close()
+
+            self.ui_cpw_dialog.show()
+
+        else:
+
+            self.show()
+
+
     def delete(self, obj):
         """ Method to delete an object. """
 
         # Delete the object
         del obj
+
+    def test(self):
+        print("works")
+
+    def myShow(self):
+
+        # Check to see if software has been configured
+        self.configure()
+
+        
+

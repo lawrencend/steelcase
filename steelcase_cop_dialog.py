@@ -6,7 +6,7 @@
 	This module provides a class, Cop_dialog, to change the output path.
 """
 
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 import os
 from steelcase_cop_dialog_ui import Ui_steelcase_cop_dialog
 
@@ -26,13 +26,15 @@ class Cop_dialog(QtGui.QDialog):
 		self.ui.setupUi(self)
 
 		# Open .steelcase_path
-		with open(".steelcase_path", "r") as file:
+		with open(".steelcase_path", "w+") as file:
 
 			# Read the current path
 			current_path = file.read()
 
 		self.ui.current_path_line_edit.setText(current_path)
 
+		# Flag window to stay on top
+		self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
 	def accept(self):
 		"""Accept method. Called upon the ok button being clicked.

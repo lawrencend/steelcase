@@ -20,7 +20,7 @@ if __name__ == "__main__":
 	steelcase = Main_window()
 
 	# Show steelcase gui
-	steelcase.show()
+	steelcase.myShow()
 
 	# Run application and return status to sys	
 	sys.exit(app.exec_())

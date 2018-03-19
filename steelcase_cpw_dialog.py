@@ -28,6 +28,9 @@ class Cpw_dialog(QtGui.QDialog):
         # Setup ui
         self.ui.setupUi(self)
 
+        # Flag window to stay on top
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+
     def accept(self):
         """accept method. Method to change user password.
             Checks to ensure passwords match before encrypting

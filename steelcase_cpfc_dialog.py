@@ -15,11 +15,14 @@ class Cpfc_dialog(QtGui.QDialog):
         # Setup ui
         self.ui.setupUi(self)
 
-        with open(".steelcase_pfc", "r") as file:
+        with open(".steelcase_pfc", "a+") as file:
 
             self.current_pfc = file.read()
 
         self.ui.current_pfc_line_edit.setText(self.current_pfc)
+
+        # Flag window to stay on top
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def accept(self):
 
@@ -43,7 +46,6 @@ class Cpfc_dialog(QtGui.QDialog):
 
             # Close the cpfc_widget
             self.close()
-
 
     def check_input(self, obj):
         """Method to create input for the zero condition. """
