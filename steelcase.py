@@ -8,7 +8,7 @@
 
 import sys
 from PyQt4 import QtGui
-from steelcase_main_window import Main_window
+from src.steelcase_main_window import Main_window
 
 # Only run if module is called directly
 if __name__ == "__main__":
