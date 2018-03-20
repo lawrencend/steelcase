@@ -26,10 +26,7 @@ class Data_management(object):
 		# Header string for the output file
 		self.header_string = "Test ID,Test Pass/Fail Force [lbf], Pass/Fail Criteria [lbf],Test Result\n"
 
-		# Create names
 		self.create_names()
-
-		# Create directories if the don't exist
 		self.create_directories()
 
 		# Check to see if there are previous tests on this day
@@ -104,7 +101,7 @@ class Data_management(object):
 		file_name = date + ".csv"
 
 		# Directory path
-		self.dir_path = "/home/lawrencend/Desktop/test_data/" + date
+		self.dir_path = "/home/lawrencend/test_data/" + date
 
 		# File path
 		self.file_path = self.dir_path + "/" + file_name
@@ -181,3 +178,7 @@ class Data_management(object):
 
 			# Set test_num = 1
 			self.test_num = 1
+
+	def set_output_path(self, path):
+
+		self.dir_output_path = path

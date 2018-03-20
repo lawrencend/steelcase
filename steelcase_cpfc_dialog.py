@@ -3,7 +3,7 @@ from steelcase_cpfc_dialog_ui import Ui_steelcase_cpfc_dialog
 
 class Cpfc_dialog(QtGui.QDialog):
 
-    def __init__(self, parent=None):
+    def __init__(self):
         """ Start_steelcase init method. """
 
         # init parent classes
@@ -21,8 +21,12 @@ class Cpfc_dialog(QtGui.QDialog):
 
         self.ui.current_pfc_line_edit.setText(self.current_pfc)
 
-        # Flag window to stay on top
-        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        # Center
+        self.move(QtGui.QDesktopWidget().availableGeometry().center() - self.frameGeometry().center())
+
+    def __del__(self):
+
+        print("deleted")
 
     def accept(self):
 
