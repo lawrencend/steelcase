@@ -1,16 +1,20 @@
 
-from PyQt5 import QtWidgets
+from pathlib import Path
+import time
+
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import QThread
 from PyQt5.QtCore import pyqtSlot, pyqtSignal
-from pathlib import Path
+from PyQt5.QtWidgets import QDialog, QDesktopWidget, QMessageBox, QDialogButtonBox
 
 from src.main_window_ui import Ui_MainWindow
 from src.cpfc_dialog import CpfcDialog
 from src.cop_dialog import CopDialog
 from src.cpw_dialog import CpwDialog
 from src.pw_dialog import PwDialog
+from src.worker import Worker
 
-import time
+
 class MainWindow(QtWidgets.QMainWindow):
     """ MainWindow class. This class is used to setup the GUI/
         manage GUI event handeling. MainWindow inherites from
@@ -28,23 +32,11 @@ class MainWindow(QtWidgets.QMainWindow):
         # Pass self to ui to setup
         self._ui.setupUi(self)
 
-        self._cpfc_dialog = CpfcDialog()
-        #self._cpfc_dialog.show()
-
-        self._cop_dialog = CopDialog()
-        #self._cop_dialog.show()
-
-        self._cpw_dialog = CpwDialog()
-        self._cpw_dialog.show()
-
-        self._pw_dialog = PwDialog()
-        self._pw_dialog.show()
-
         # Connections
         self._ui.start_push_button.clicked.connect(self._start_button_clicked)
-        self._ui.action_change_pass_fail_force_criteria.triggered.connect(self._start_cpfc)
-        self._ui.action_change_password.triggered.connect(self._start_cpw)
-        self._ui.action_change_output_path.triggered.connect(self._start_cop)
+        # self._ui.action_change_pass_fail_force_criteria.triggered.connect(self._start_cpfc)
+        # self._ui.action_change_password.triggered.connect(self._start_cpw)
+        # self._ui.action_change_output_path.triggered.connect(self._start_cop)
 
         # QThread instance
         self._thread = QtCore.QThread()
@@ -53,10 +45,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self._update_status('')
 
         # Update the cpfc line edit in the main dialog
-        self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc)
+        # self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc)
 
-        # Delete self._cpfc_dialog
-        self._delete_cpfc()
 
     @pyqtSlot()
     def _start_button_clicked(self):
@@ -64,8 +54,96 @@ class MainWindow(QtWidgets.QMainWindow):
             not a thread is currently running and start/stop
             a thread as appropriate.
         """ 
-        pass
+       
+        # See if self.thread is currently running
+        if self._thread.isRunning():
 
+            # Stop it
+            self._stop_thread()
+            self._update_status("test_stopped")
+
+        # Else start a new thread
+        else:
+
+            # Start thread
+            self._start_thread()
+
+    def _start_thread(self):
+        """ start_thread method. Used to create a new QThread instance,
+            new Worker instance, connect signals/slots, and start the thread.
+        """
+
+        # Worker instance
+        self._worker = Worker()
+
+        # QThread instance
+        self._thread = QtCore.QThread()
+
+        # Move worker to thread
+        self._worker.moveToThread(self._thread)
+
+        # Connect self.thread started() signal to self.update_status
+        self._thread.started.connect(lambda: self._update_status("running"))
+
+        # Connect self.thread started() signal to self.update_button
+        self._thread.started.connect(lambda: self._update_button("stop"))
+
+
+        self._thread.started.connect(self._worker.run)
+
+
+        self._thread.started.connect(lambda: self._update_button('start'))
+
+        self._worker.finished.connect(self._stop_thread)
+        self._worker.finished.connect(lambda: self._update_status('pass'))
+
+
+
+        # # Connect self.worker finished() signal to self._stop_thread
+        # QtCore.QObject.connect(self.worker.load_cell,
+        #                        QtCore.SIGNAL("pass()"),
+        #                        lambda: self.update_status("pass"))
+
+        # # Connect self.worker finished() signal to self.update_status
+        # QtCore.QObject.connect(self.worker.load_cell,
+        #                        QtCore.SIGNAL("fail()"),
+        #                        lambda: self.update_status("fail"))
+
+        # Create a new test
+        # self.data_man.new_test(self.worker)
+# 
+        # Update the test_id line edit
+        # self.ui.test_id_line_edit.setText(self.data_man.test_id)
+
+        # Start the thread
+        self._thread.start()
+
+    @pyqtSlot()
+    def _stop_thread(self):
+        """ Method to quit a thread once the worker has finished. """
+
+        # Quit the thread
+        self._thread.quit()
+
+        # Wait for the thread to quit
+        self._thread.wait()
+
+        # Complete the test by logging data
+        # self.data_man.complete_test()
+    
+    def _update_button(self, status):
+        """ Method to update the push button. Requires "status" as
+            an input.
+        """
+
+        # Create text_options dictionary
+        text_options = {}
+        text_options.update({"start": "Start New Test"})
+        text_options.update({"stop": "Stop Test"})
+
+            # Update the push button text with the current status
+        self._ui.start_push_button.setText(text_options[status])
+  
     def _update_status(self, status):
         """Method to update the status displayed on the dialog.
             Requires running/pass/fail status as a input.
@@ -88,10 +166,10 @@ class MainWindow(QtWidgets.QMainWindow):
         bc_options.update({"": "background-color: rgb(255, 255, 255);"})
 
         # Update the line edit text
-        self.ui.status_line_edit.setText(text_options[status])
+        self._ui.status_line_edit.setText(text_options[status])
 
         # Update the line edit background color
-        self.ui.status_line_edit.setStyleSheet(bc_options[status])
+        self._ui.status_line_edit.setStyleSheet(bc_options[status])
 
 
     def show_main_window(self):
@@ -106,8 +184,8 @@ class MainWindow(QtWidgets.QMainWindow):
         if not path.is_file():
 
             # Message box success notification
-            msg = QtGui.QMessageBox()
-            msg.setIcon(QtGui.QMessageBox.Critical)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
             msg.setWindowTitle("Hi There!")
             msg.setText("Glad to have you as a first time user...")
             msg.setInformativeText("We need you to set your password and output path before using the application.")
@@ -122,48 +200,23 @@ class MainWindow(QtWidgets.QMainWindow):
             # Cpfc_dialog instance
             self._cpfc_dialog = CpfcDialog()
 
-
+            # Connect cpw finished to cop show
             self._cpw_dialog.finished.connect(self._cop_dialog.show)
-    
- 
-            # QtCore.QObject.connect(self.ui_cop_dialog,
-            #                        QtCore.SIGNAL("finished(int)"),
-            #                        self.ui_cpfc_dialog.show)
- 
-            # QtCore.QObject.connect(self.ui_cpfc_dialog,
-            #                        QtCore.SIGNAL("finished(int)"),
-            #                        self.showMaximized)
 
-            # QtCore.QObject.connect(self.ui_cpw_dialog,
-            #                        QtCore.SIGNAL("finished(int)"),
-            #                        self.delete_cpw)
+            # Connect cop finished to cpfc show
+            self._cop_dialog.finished.connect(self._cpfc_dialog.show)
 
-            # QtCore.QObject.connect(self.ui_cop_dialog,
-            #                        QtCore.SIGNAL("finished(int)"),
-            #                        self.delete_cop)
+            # Connect cpfc finished to self.showMaximized
+            self._cpfc_dialog.finished.connect(self.showMaximized)
 
-            # QtCore.QObject.connect(self.ui_cpfc_dialog,
-            #                        QtCore.SIGNAL("finished(int)"),
-            #                        self.delete_cpfc)
-
-            f = open(".steelcase_configured", "w+")
+            # Write .configured token
+            f = open(".configured", "w+")
             f.close()
 
-            self.ui_cpw_dialog.show()
-
+            # Show the cpw
+            self._cpw_dialog.show()
+            
         else:
 
-            self.show()
-
- 
-     def _delete_cpfc(self):
-
-        del self._cpfc_dialog
-
-    def _delete_cpw(self):
-
-        del self._cpw_dialog
-
-    def _delete_cop(self):
-
-        del self._cop_dialog
+            # Show the mainwindow
+            self.showMaximized()

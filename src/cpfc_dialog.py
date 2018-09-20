@@ -82,3 +82,6 @@ class CpfcDialog(QDialog):
 
             # Set input_status to false
             self._input_status = False
+
+        else:
+            self._input_status = True
