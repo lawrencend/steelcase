@@ -53,6 +53,8 @@ class CopDialog(QDialog):
             # Open .steelcase_path
             with open(".steelcase_path", "w") as file:
 
+                print('writing it out')
+
                 # Write the new path
                 file.write(path)
 
