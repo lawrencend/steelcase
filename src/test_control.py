@@ -49,14 +49,14 @@ class TestControl(QObject):
         # # Connect timer's timeout signal to self.work() slot
         self._timer.timeout.connect(self._work)
 
-        self._timer.finished.connect(self._stop)
+        # self._timer.finished.connect(self._stop)
         # self._load_cell.finished.connect(self._stop)
 
         # ensure servo is extended
         self._pyfirmata.fully_extend_servo()
 
         # Start the timer
-        self._timer.start(50) # 1000 ms
+        self._timer.start(50) # 50 ms / 20 hz. Placeholder value.
 
     @pyqtSlot()
     def _work(self):
@@ -73,17 +73,19 @@ class TestControl(QObject):
         if self._load_cell.continue_test:
             self._pyfirmata.increment_retract_servo()
             servo_command_sent = 'increment_retract'
+            temp = [current_datetime, current_time, self._load_cell.force, raw_load_cell_value,
+                    servo_command_sent, self._load_cell.current_pfc, self._load_cell.test_status]
 
-        current_datetime = datatime.now()
+            self.data.append(temp)
+
         else:
             servo_command_sent = None
+            temp = [current_datetime, current_time, self._load_cell.force, raw_load_cell_value,
+                servo_command_sent, self._load_cell.current_pfc, self._load_cell.test_status]
+
+            self.data.append(temp)
             self._stop()
 
-
-        temp = [current_datetime, current_time, self._load_cell.force, raw_load_cell_value,
-                servo_command_sent, pass_fail_criteria_used, self._load_cell.test_status]
-
-        self.data.append(temp)
 
     @pyqtSlot()
     def _stop(self):

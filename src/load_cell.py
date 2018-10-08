@@ -18,21 +18,22 @@ class LoadCell(QObject):
         self._force_readings = list()
         self._time_stamps = list()
 
+        with open('.steelcase_pfc') as file:
+            self.current_pfc = float(file.read())
+
     def update(self, raw_load_cell_value, time):
         """ update method to update the load_cell/ associated
             calcs... more later.
         """
 
-        correction= 1.4
+
+        correction= 1
         self.force = correction*raw_load_cell_value
 
-        self.criteria_pfc = 3
-
-        self.force = random.randint(0, 300)
 
         self._check_for_failure(time)
 
-        if self.force >= self.criteria_pfc and self.test_status == 'RUNNING':
+        if self.force >= self.current_pfc and self.test_status == 'RUNNING':
 
             self.continue_test = False
             self.test_status = 'PASSED'

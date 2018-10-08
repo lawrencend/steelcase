@@ -12,18 +12,16 @@ def add_test(test_df):
     summary_path = Path(f'{current_output_path}/{datetime.now().date()}.csv')
     test_path = Path(f'{current_output_path}/{datetime.now()}.csv')
 
-    test_df.to_csv(test_path)
+    test_df.to_csv(test_path, index=False)
 
     if summary_path.is_file():
 
         summary_df = pd.read_csv(summary_path)
-        
-        print(summary_df, test_df)
 
         summary_df = pd.concat([summary_df, test_df.tail(1)])
 
     else:
-        summary_df = test_df
+        summary_df = test_df.tail(1)
 
     summary_df.to_csv(summary_path, index=False)
 

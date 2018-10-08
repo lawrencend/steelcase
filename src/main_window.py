@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QDialog, QDesktopWidget, QMessageBox, QDialogButtonB
 
 from src.main_window_ui import Ui_MainWindow
 from src.cpfc_dialog import CpfcDialog
+# from src.cop_dialog import cop
 from src.cop_dialog import CopDialog
 from src.cpw_dialog import CpwDialog
 from src.pw_dialog import PwDialog
@@ -36,26 +37,33 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Connections
         self._ui.start_push_button.clicked.connect(self._start_button_clicked)
-        # self._ui.action_change_pass_fail_force_criteria.triggered.connect(self._start_cpfc)
+        self._ui.action_change_pass_fail_force_criteria.triggered.connect(self._start_cpfc)
         # self._ui.action_change_password.triggered.connect(self._start_cpw)
-        # self._ui.action_change_output_path.triggered.connect(self._start_cop)
-
-
-        # ert
-        # self._pyfirmata = PyFirmataTeensy()
+        self._ui.action_change_output_path.triggered.connect(self._start_cop)
 
         # QThread instance
-        # self._test_control = TestControl()
         self._thread = QtCore.QThread()
-        # self._test_control.moveToThread(self._thread)
-        # self._thread.started.connect(self._test_control.run)
-        # self._thread.start()
+
         # Set initial status
         self._update_status('')
 
-        # Update the cpfc line edit in the main dialog
-        # self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc)
+        with open('.steelcase_pfc') as file:
+            current_pfc = file.read()
 
+        # Update the cpfc line edit in the main dialog
+        self._ui.current_pfc_line_edit.setText(current_pfc)
+
+    def _start_cpfc(self):
+        self._cpfc_dialog = CpfcDialog()
+        self._cpfc_dialog.finished.connect(lambda: self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc))
+        self._cpfc_dialog.show()
+
+    def _start_cpw(self):
+        self._cpw_dialog = CpwDialog()
+        self._cpw_dialog.show()
+
+    def _start_cop(self):
+        self._cop_dialog = CopDialog()
 
     @pyqtSlot()
     def _start_button_clicked(self):
@@ -207,6 +215,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
             # Connect cpfc finished to self.showMaximized
             self._cpfc_dialog.finished.connect(self.showMaximized)
+            self._cpfc_dialog.finished.connect(lambda: self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc))
 
             # Write .configured token
             f = open(".configured", "w+")
