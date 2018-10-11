@@ -47,12 +47,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # Set initial status
         self._update_status('')
 
-        with open('.steelcase_pfc') as file:
-            current_pfc = file.read()
-
-        # Update the cpfc line edit in the main dialog
-        self._ui.current_pfc_line_edit.setText(current_pfc)
-
     def _start_cpfc(self):
         self._cpfc_dialog = CpfcDialog()
         self._cpfc_dialog.finished.connect(lambda: self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc))
@@ -64,6 +58,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _start_cop(self):
         self._cop_dialog = CopDialog()
+        self._cop_dialog.show()
 
     @pyqtSlot()
     def _start_button_clicked(self):
@@ -214,8 +209,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self._cop_dialog.finished.connect(self._cpfc_dialog.show)
 
             # Connect cpfc finished to self.showMaximized
-            self._cpfc_dialog.finished.connect(self.showMaximized)
             self._cpfc_dialog.finished.connect(lambda: self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc))
+            self._cpfc_dialog.finished.connect(self.showMaximized)
 
             # Write .configured token
             f = open(".configured", "w+")
@@ -223,8 +218,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
             # Show the cpw
             self._cpw_dialog.show()
-            
+
         else:
+
+            with open('.steelcase_pfc') as file:
+                current_pfc = file.read()
+
+            # Update the cpfc line edit in the main dialog
+            self._ui.current_pfc_line_edit.setText(current_pfc)
 
             # Show the mainwindow
             self.showMaximized()

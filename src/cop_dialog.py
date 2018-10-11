@@ -42,6 +42,8 @@ class CopDialog(QDialog):
         # Center
         # self.move(QDesktopWidget().availableGeometry().center() - self.frameGeometry().center())
 
+
+    def show(self):
         self.current_path = QFileDialog.getExistingDirectory(self, 'Select a directory to output files')
         with open(".steelcase_path", "w+") as file:
 
