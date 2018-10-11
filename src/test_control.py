@@ -64,23 +64,23 @@ class TestControl(QObject):
             for one iteration of the process.
         """
 
-        raw_load_cell_value = self._pyfirmata.read_load_cell()
+#        raw_load_cell_value = self._pyfirmata.read_load_cell() #
         current_datetime = datetime.now()
         current_time = datetime.now().time()
 
-        self._load_cell.update(raw_load_cell_value, current_time)
+        self._load_cell.update(current_time)
 
         if self._load_cell.continue_test:
             self._pyfirmata.increment_retract_servo()
             servo_command_sent = 'increment_retract'
-            temp = [current_datetime, current_time, self._load_cell.force, raw_load_cell_value,
+            temp = [current_datetime, current_time, self._load_cell.force, self._load_cell.raw_load_cell_value,
                     servo_command_sent, self._load_cell.current_pfc, self._load_cell.test_status]
 
             self.data.append(temp)
 
         else:
             servo_command_sent = None
-            temp = [current_datetime, current_time, self._load_cell.force, raw_load_cell_value,
+            temp = [current_datetime, current_time, self._load_cell.force, self._load_cell.raw_load_cell_value,
                 servo_command_sent, self._load_cell.current_pfc, self._load_cell.test_status]
 
             self.data.append(temp)

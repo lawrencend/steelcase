@@ -1,12 +1,24 @@
 from PyQt5.QtCore import QObject, pyqtSignal
 from numpy import random
-from scipy.stats import linregress
+from scipy.stats import 
+from hx711 import HX711
+import time
+from datetime import datetime
 
 class LoadCell(QObject):
     """This class serves to house readings from the load cell...
         Inherites from QtCore.QObject
     """
-
+    
+    hx = HX711(5,6)
+    
+    hx.set_reading_format("LSB", "MSB") #monitor if strange readings change first to MSB
+    #change this for right reference, converts volatge to force
+    hx.set_reference_unit(92)
+    hx.reset()
+    hx.tare() 
+    
+    
     def __init__(self):
         """ Load_cell init method """
 
@@ -21,13 +33,17 @@ class LoadCell(QObject):
         with open('.steelcase_pfc') as file:
             self.current_pfc = float(file.read())
 
-    def update(self, raw_load_cell_value, time):
+    def update(self,time):
         """ update method to update the load_cell/ associated
             calcs... more later.
         """
-
-
-        correction= 1
+        self._load_cell.raw_load_cell_value = hx.get_weight(5)
+        
+        hx.power_down()
+        hx.power_up()
+#        time.sleep(0.05)
+        
+        correction= 2.5#uncomment if give mv#*10**3 #   lb/volt for lbs maybe, but through amplifier what are we getting
         self.force = correction*raw_load_cell_value
 
 
