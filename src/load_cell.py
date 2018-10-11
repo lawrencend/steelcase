@@ -1,14 +1,11 @@
 from PyQt5.QtCore import QObject, pyqtSignal
 from numpy import random
+from scipy.stats import linregress
 
 class LoadCell(QObject):
     """This class serves to house readings from the load cell...
         Inherites from QtCore.QObject
     """
-
-    finished = pyqtSignal(int)
-    passed = pyqtSignal(int)
-    failed = pyqtSignal(int)
 
     def __init__(self):
         """ Load_cell init method """
@@ -16,52 +13,56 @@ class LoadCell(QObject):
         # Init parent classes
         super().__init__()
 
-        # Temp force attr
-        self._force = 0
-        self._status = "stopped"
+        # Attributes
+        self.force = 0
+        self._force_readings = list()
+        self._time_stamps = list()
 
-        with open(".steelcase_pfc", "r") as file:
+        with open('.steelcase_pfc') as file:
+            self.current_pfc = float(file.read())
 
-            self._current_pfc = float(file.read())
-        
-    def update(self):
+    def update(self, raw_load_cell_value, time):
         """ update method to update the load_cell/ associated
             calcs... more later.
         """
 
-        self._force += 1
 
-        print("Force = ", self._force/100)
-
-        # Stop if force is greater than 1000. 
-        # In the future, this is where we determine a pass/fail status.
-
-        if self._force >= self._current_pfc*100:
-
-            num = random.randint(0, 2)
-
-            if num == 0:
-
-                self._status = "fail"
-
-            else:
-
-                self._status = "pass"
-
-            # Stop
-            self._stop()
+        correction= 1
+        self.force = correction*raw_load_cell_value
 
 
-    def _stop(self):
-        """ stop method to emit a finished signal. """
+        self._check_for_failure(time)
 
-        # Emit a finished signal.
-        self.finished.emit(1)
+        if self.force >= self.current_pfc and self.test_status == 'RUNNING':
 
-        if self._status == "pass":
+            self.continue_test = False
+            self.test_status = 'PASSED'
 
-            self.passed.emit(1)
+        elif self.test_status == 'FAILED':
+            self.continue_test = False
 
-        elif self._status == "fail":
+        elif self.test_status == 'RUNNING':
+            self.continue_test = True
 
-            self.failed.emit(1)
+    def _check_for_failure(self, time):
+
+        if len(self._force_readings) > 0:
+
+            if len(self._force_readings) > 15:
+
+                self._force_readings.pop(0)
+                self._force_readings.append(self.force)
+
+                self._time_stamps.pop(0)
+                self._time_stamps.append(time)
+
+            slope = linregress(self._force_readings, self._time_stamps)[0]
+
+            if slope < 0:
+                self.test_status = 'FAILED'
+
+            elif slope >= 0:
+                self.test_status = 'RUNNING'
+
+        else:
+            self.test_status = 'RUNNING'

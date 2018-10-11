@@ -31,9 +31,9 @@ class CpfcDialog(QDialog):
 
         with open('.steelcase_pfc', 'a+') as file:
 
-            self._current_pfc = file.read()
+            self.current_pfc = file.read()
 
-        self._ui.current_pfc_line_edit.setText(self._current_pfc)
+        self._ui.current_pfc_line_edit.setText(self.current_pfc)
 
         # Center
         self.move(QDesktopWidget().availableGeometry().center() - self.frameGeometry().center())
@@ -45,21 +45,21 @@ class CpfcDialog(QDialog):
         self._check_input(self._ui.new_pfc_line_edit)
         
         # Get current value
-        self._current_pfc = self._ui.new_pfc_line_edit.text()
+        self.current_pfc = self._ui.new_pfc_line_edit.text()
 
         if self._input_status:
 
             with open('.steelcase_pfc', 'w') as file:
 
-                file.write(self._current_pfc)
+                file.write(self.current_pfc)
                 
-            self._ui.current_pfc_line_edit.setText(self._current_pfc)
+            self._ui.current_pfc_line_edit.setText(self.current_pfc)
 
             # Message box success notification
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setWindowTitle('Success!')
-            msg.setText(f'Pass/Fail criteria successfully changed to "{self._current_pfc}" [lbf]')
+            msg.setText(f'Pass/Fail criteria successfully changed to "{self.current_pfc}" [lbf]')
             msg.exec_()
 
             # Close the cpfc_widget

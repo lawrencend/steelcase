@@ -9,11 +9,14 @@ from PyQt5.QtWidgets import QDialog, QDesktopWidget, QMessageBox, QDialogButtonB
 
 from src.main_window_ui import Ui_MainWindow
 from src.cpfc_dialog import CpfcDialog
+# from src.cop_dialog import cop
 from src.cop_dialog import CopDialog
 from src.cpw_dialog import CpwDialog
 from src.pw_dialog import PwDialog
 from src.worker import Worker
-
+from src.test_control import TestControl
+# from src.pyfirmata_teensy import PyFirmataTeensy
+from src.data_management import add_test
 
 class MainWindow(QtWidgets.QMainWindow):
     """ MainWindow class. This class is used to setup the GUI/
@@ -34,9 +37,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Connections
         self._ui.start_push_button.clicked.connect(self._start_button_clicked)
-        # self._ui.action_change_pass_fail_force_criteria.triggered.connect(self._start_cpfc)
+        self._ui.action_change_pass_fail_force_criteria.triggered.connect(self._start_cpfc)
         # self._ui.action_change_password.triggered.connect(self._start_cpw)
-        # self._ui.action_change_output_path.triggered.connect(self._start_cop)
+        self._ui.action_change_output_path.triggered.connect(self._start_cop)
 
         # QThread instance
         self._thread = QtCore.QThread()
@@ -44,9 +47,18 @@ class MainWindow(QtWidgets.QMainWindow):
         # Set initial status
         self._update_status('')
 
-        # Update the cpfc line edit in the main dialog
-        # self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc)
+    def _start_cpfc(self):
+        self._cpfc_dialog = CpfcDialog()
+        self._cpfc_dialog.finished.connect(lambda: self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc))
+        self._cpfc_dialog.show()
 
+    def _start_cpw(self):
+        self._cpw_dialog = CpwDialog()
+        self._cpw_dialog.show()
+
+    def _start_cop(self):
+        self._cop_dialog = CopDialog()
+        self._cop_dialog.show()
 
     @pyqtSlot()
     def _start_button_clicked(self):
@@ -54,7 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
             not a thread is currently running and start/stop
             a thread as appropriate.
         """ 
-       
+        # self._start_thread()
         # See if self.thread is currently running
         if self._thread.isRunning():
 
@@ -72,15 +84,11 @@ class MainWindow(QtWidgets.QMainWindow):
         """ start_thread method. Used to create a new QThread instance,
             new Worker instance, connect signals/slots, and start the thread.
         """
-
-        # Worker instance
-        self._worker = Worker()
-
-        # QThread instance
+        # self._thread.start()
+        self._test_control = TestControl()
         self._thread = QtCore.QThread()
-
-        # Move worker to thread
-        self._worker.moveToThread(self._thread)
+        self._test_control.moveToThread(self._thread)
+        self._thread.started.connect(self._test_control.run)
 
         # Connect self.thread started() signal to self.update_status
         self._thread.started.connect(lambda: self._update_status("running"))
@@ -88,48 +96,42 @@ class MainWindow(QtWidgets.QMainWindow):
         # Connect self.thread started() signal to self.update_button
         self._thread.started.connect(lambda: self._update_button("stop"))
 
+        # Connect self._test_control finished() signal to self._stop_test
+        self._test_control.finished.connect(lambda test_df: self._stop_test(test_df))
 
-        self._thread.started.connect(self._worker.run)
-
-
-        self._thread.started.connect(lambda: self._update_button('start'))
-
-        self._worker.finished.connect(self._stop_thread)
-        self._worker.finished.connect(lambda: self._update_status('pass'))
-
-
-
-        # # Connect self.worker finished() signal to self._stop_thread
-        # QtCore.QObject.connect(self.worker.load_cell,
-        #                        QtCore.SIGNAL("pass()"),
-        #                        lambda: self.update_status("pass"))
-
-        # # Connect self.worker finished() signal to self.update_status
-        # QtCore.QObject.connect(self.worker.load_cell,
-        #                        QtCore.SIGNAL("fail()"),
-        #                        lambda: self.update_status("fail"))
-
-        # Create a new test
-        # self.data_man.new_test(self.worker)
-# 
-        # Update the test_id line edit
-        # self.ui.test_id_line_edit.setText(self.data_man.test_id)
-
-        # Start the thread
         self._thread.start()
 
-    @pyqtSlot()
     def _stop_thread(self):
-        """ Method to quit a thread once the worker has finished. """
 
-        # Quit the thread
+          # Quit the thread
         self._thread.quit()
 
         # Wait for the thread to quit
-        self._thread.wait()
+        self._thread.wait()      
 
+
+    @pyqtSlot()
+    def _stop_test(self, test_df):
+        """ Method to quit a thread once the worker has finished. """
+
+        self._stop_thread()
+
+        test_result = test_df['test_status'].tail(1).values[0]
+        print(test_result)
+
+        if test_result == 'PASSED':
+            self._update_status('pass')
+
+        elif test_result == 'FAILED':
+            self._update_status('fail')
+
+
+        self._update_button('start')
+        # print(test_df)
         # Complete the test by logging data
         # self.data_man.complete_test()
+
+        add_test(test_df)
     
     def _update_button(self, status):
         """ Method to update the push button. Requires "status" as
@@ -207,6 +209,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._cop_dialog.finished.connect(self._cpfc_dialog.show)
 
             # Connect cpfc finished to self.showMaximized
+            self._cpfc_dialog.finished.connect(lambda: self._ui.current_pfc_line_edit.setText(self._cpfc_dialog.current_pfc))
             self._cpfc_dialog.finished.connect(self.showMaximized)
 
             # Write .configured token
@@ -215,8 +218,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
             # Show the cpw
             self._cpw_dialog.show()
-            
+
         else:
+
+            with open('.steelcase_pfc') as file:
+                current_pfc = file.read()
+
+            # Update the cpfc line edit in the main dialog
+            self._ui.current_pfc_line_edit.setText(current_pfc)
 
             # Show the mainwindow
             self.showMaximized()
