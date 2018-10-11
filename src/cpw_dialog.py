@@ -53,10 +53,10 @@ class CpwDialog(QDialog):
 
             # Save the hashed password locally
             with open('.steelcase_pw', 'w') as file:
-                file.write(f'{pw_hash}\n')
-                file.write(f'{0}\n')
-                file.write(f'{False}\n')
-                file.write(f'{0}\n')
+                file.write(str(pw_hash) + '\n')
+                file.write('0\n')
+                file.write('False\n')
+                file.write('0\n')
 
             # Message box success notification
             msg = QMessageBox()

@@ -59,7 +59,7 @@ class CpfcDialog(QDialog):
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setWindowTitle('Success!')
-            msg.setText(f'Pass/Fail criteria successfully changed to "{self.current_pfc}" [lbf]')
+            msg.setText('Pass/Fail criteria successfully changed to ' + str(self.current_pfc) + ' [lbf]')
             msg.exec_()
 
             # Close the cpfc_widget
