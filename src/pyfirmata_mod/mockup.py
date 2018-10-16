@@ -1,6 +1,6 @@
 from collections import deque
 
-import src.pyfirmata_mod as pyfirmata
+import src.pyfirmata as pyfirmata
 
 
 class MockupSerial(deque):
