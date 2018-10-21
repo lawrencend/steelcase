@@ -9,8 +9,8 @@ def add_test(test_df):
         # Read the current path
         current_output_path = file.read()
 
-    summary_path = Path(f'{current_output_path}/{datetime.now().date()}.csv')
-    test_path = Path(f'{current_output_path}/{datetime.now()}.csv')
+    summary_path = Path(str(current_output_path) + '/' + str(datetime.now().date()) + '.csv')
+    test_path = Path(str(current_output_path) + '/' + str(datetime.now()) + '.csv')
 
     test_df.to_csv(test_path, index=False)
 

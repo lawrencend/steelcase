@@ -1,6 +1,6 @@
 import time
 from random import uniform
-import src.pyfirmata_mod as pyfirmata
+import pyfirmata
 
 
 class PyFirmataTeensy:

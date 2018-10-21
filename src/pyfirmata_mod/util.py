@@ -6,7 +6,7 @@ import os
 
 import serial
 
-import pyfirmata
+import src.pyfirmata as pyfirmata
 from .boards import BOARDS
 
 

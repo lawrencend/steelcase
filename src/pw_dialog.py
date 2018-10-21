@@ -61,10 +61,10 @@ class PwDialog(QDialog):
         """ Method to write out the current status. """
 
         with open(".steelcase_pw", "w") as file:
-            file.write(f'{self._pw_hash}\n')
-            file.write(f'{self._attempts}\n')
-            file.write(f'{self._locked}\n')
-            file.write(f'{self._lockout_time}\n')  
+            file.write(str(self._pw_hash) + '\n')
+            file.write(str(self._attempts) + '\n')
+            file.write(str(self._locked) + '\n')
+            file.write(str(self._lockout_time) + '\n')  
 
     def accept(self):
         """ Overwritten parent accept method. """
@@ -98,7 +98,7 @@ class PwDialog(QDialog):
             except argon2.exceptions.VerifyMismatchError:
 
                 self._attempts += 1
-                self._ui.pw_status_label.setText(f"Incorrect Password! {int(self.ok_num_attempts - self._attempts)} attemps left.")
+                self._ui.pw_status_label.setText('Incorrect Password! ' + str(int(self.ok_num_attempts - self._attempts)) + ' attemps left.')
                 self._write_status()
 
         else:
@@ -112,9 +112,9 @@ class PwDialog(QDialog):
 
         self._locked = True
         self._ui.pw_line_edit.setEnabled(False)
-        self._ui.pw_line_edit.setText(f'Locked! Too many attempts! ')
+        self._ui.pw_line_edit.setText('Locked! Too many attempts! ')
         self._ui.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
-        self._ui.pw_status_label.setText(f'Account Locked! Try again in {int((-time.time() + self._lock_time + self._lockout_time)/60)} minutes')
+        self._ui.pw_status_label.setText('Account Locked! Try again in ' + str(int((-time.time() + self._lock_time + self._lockout_time)/60)) + ' minutes')
 
     def _unlock_gui(self):
         """ Method to unlock the gui. """
