@@ -7,7 +7,7 @@ class PyFirmataTeensy:
 
 	def __init__(self):
 
-		# self._board = pyfirmata.util.get_the_board(base_dir='/dev/serial/by-id/', identifier='usb-')
+		self._board = pyfirmata.util.get_the_board(base_dir='/dev/serial/by-id/', identifier='usb-')
 		
 		# Attributes
 		self._servo_max = 2000 # mirco-s
@@ -22,21 +22,21 @@ class PyFirmataTeensy:
 		analog_pin = 'a'
 		input_pin_mode = 'i'
 
-		# self._servo = self._board.get_pin(f'{digital_pin}:5:{servo_pin_mode}')
+		self._servo = self._board.get_pin(f'{digital_pin}:5:{servo_pin_mode}')
 		# self._load_cell = self._board.get_pin(f'{analog_pin}:6:{input_pin_mode}')
 		# # self._board.servo_config(5, self._servo_min, self._servo_max, self._servo_fully_retracted_pos)
 
-		# self.iterate = pyfirmata.util.Iterator(self._board)
-		# self.iterate.start()
+		self.iterate = pyfirmata.util.Iterator(self._board)
+		self.iterate.start()
 
-	def read_load_cell(self):
+	# def read_load_cell(self):
 
-		spring_constant = 2 # lbf/in
+	# 	# spring_constant = 2 # lbf/in
 
-		force = self.get_servo_pos()*spring_constant*uniform(0.97, 1.03)
-		print(self.get_servo_pos())
-		return force
-		# return self._load_cell.read()
+	# 	# force = self.get_servo_pos()*spring_constant*uniform(0.97, 1.03)
+	# 	# print(self.get_servo_pos())
+	# 	# return force
+	# 	return self._load_cell.read()
 
 	def get_servo_pos(self):
 		return (self._servo_current_pos - self._servo_fully_extended_pos)*self._servo_pos_degrees_to_inches
@@ -58,7 +58,7 @@ class PyFirmataTeensy:
 	def fully_retract_servo(self):
 
 		self._servo_current_pos = self._servo_fully_retracted_pos
-		# self._servo.write(self._servo_current_pos)
+		self._servo.write(self._servo_current_pos)
 
 if __name__ == "__main__":
 

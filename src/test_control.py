@@ -52,9 +52,6 @@ class TestControl(QObject):
         # self._timer.finished.connect(self._stop)
         # self._load_cell.finished.connect(self._stop)
 
-        # ensure servo is extended
-        self._pyfirmata.fully_extend_servo()
-
         # Start the timer
         self._timer.start(50) # 50 ms / 20 hz. Placeholder value.
 
@@ -92,6 +89,9 @@ class TestControl(QObject):
         """ stop slot. Used to emit a finished() signal. """
 
         self._test_data = DataFrame(self.data, columns=self.headers)
+
+        # ensure servo is extended
+        self._pyfirmata.fully_extend_servo()
 
         # Emit a finished signal.
         self.finished.emit(self._test_data)
