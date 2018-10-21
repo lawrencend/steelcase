@@ -13,7 +13,7 @@ from src.cpfc_dialog import CpfcDialog
 from src.cop_dialog import CopDialog
 from src.cpw_dialog import CpwDialog
 from src.pw_dialog import PwDialog
-from src.worker import Worker
+# from src.worker import Worker
 from src.test_control import TestControl
 # from src.pyfirmata_teensy import PyFirmataTeensy
 from src.data_management import add_test

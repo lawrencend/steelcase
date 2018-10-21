@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QObject, pyqtSignal
 from numpy import random
-from scipy.stats import 
+from scipy.stats import linregress
 from hx711 import HX711
 import time
 from datetime import datetime
