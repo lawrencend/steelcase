@@ -10,8 +10,6 @@ class LoadCell(QObject):
         Inherites from QtCore.QObject
     """
     
-    
-    
     def __init__(self):
         """ Load_cell init method """
 
@@ -45,7 +43,7 @@ class LoadCell(QObject):
         self.hx.powerUp()
 #        time.sleep(0.05)
         
-        correction= 2.5#uncomment if give mv#*10**3 #   lb/volt for lbs maybe, but through amplifier what are we getting
+        correction= 1#uncomment if give mv#*10**3 #   lb/volt for lbs maybe, but through amplifier what are we getting
         self.force = correction*self.raw_load_cell_value
 
 
@@ -53,11 +51,11 @@ class LoadCell(QObject):
 
         if self.force >= self.current_pfc and self.test_status == 'RUNNING':
 
-            self.continue_test = True
+            self.continue_test = False
             self.test_status = 'PASSED'
 
         elif self.test_status == 'FAILED':
-            self.continue_test = True
+            self.continue_test = False
 
         elif self.test_status == 'RUNNING':
             self.continue_test = True
@@ -84,3 +82,20 @@ class LoadCell(QObject):
 
         else:
             self.test_status = 'RUNNING'
+
+    def _calibrate_lc(self):
+        n = 1000
+        i = 0
+        self.readings = pd.DataFrame()
+        
+        while n <= i:
+            self.data = []
+            self.datum = hx.getValue()
+            self.data.append(self.datum)
+            i += 1
+        
+        self.readings['raw_reads'] = self.data
+        self.dmean = np.mean(self.data)
+        print('Mean : ',dmean)
+        self.dstd = np.std(self.data)
+        print('St. Dev : ',dstd)
