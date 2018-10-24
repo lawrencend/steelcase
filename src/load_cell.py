@@ -4,6 +4,7 @@ from scipy.stats import linregress
 from hx711 import HX711
 import time
 from datetime import datetime
+import pandas as pd
 
 class LoadCell(QObject):
     """This class serves to house readings from the load cell...
@@ -88,9 +89,10 @@ class LoadCell(QObject):
         i = 0
         self.readings = pd.DataFrame()
         
-        while n <= i:
+        while i <= n:
             self.data = []
-            self.datum = hx.getValue()
+            self.datum = self.hx.getValue()
+            print(self.datum)
             self.data.append(self.datum)
             i += 1
         
