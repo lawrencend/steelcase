@@ -200,6 +200,12 @@ class MainWindow(QtWidgets.QMainWindow):
         bc_options.update({"": "background-color: rgb(255, 255, 255);"})
 
         # Update the line edit text
+        if status == 'update':
+            self._ui.status_line_edit.setFont(self._ui.status_line_edit.font().setPointSize(15))
+
+        else:
+            self._ui.status_line_edit.setFont(self._ui.status_line_edit.font().setPointSize(45))
+
         self._ui.status_line_edit.setText(text_options[status])
 
         # Update the line edit background color
