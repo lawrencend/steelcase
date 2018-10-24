@@ -1,6 +1,7 @@
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
+import os
 
 
 def add_test(test_df):
@@ -9,7 +10,14 @@ def add_test(test_df):
         # Read the current path
         current_output_path = file.read()
 
-    summary_path = Path(str(current_output_path) + '/' + str(datetime.now().date()) + '.csv')
+    day_summary_path = Path(str(current_output_path) + '/' + str(datetime.now().date()))
+    
+    if os.path.isdir(day_summary_path) == False:
+         os.mkdir(day_summary_path)   
+    else:
+        pass
+    
+    summary_path = Path(str(day_summary_path) + r'/summary.csv')
     test_path = Path(str(current_output_path) + '/' + str(datetime.now()) + '.csv')
 
     test_df.to_csv(test_path, index=False)
