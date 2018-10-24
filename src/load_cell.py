@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QObject, pyqtSignal
-from numpy import random, mean, std
+from numpy import random, mean, std, array
 from scipy.stats import linregress
 from hx711 import HX711
 import time
@@ -85,21 +85,22 @@ class LoadCell(QObject):
             self.test_status = 'RUNNING'
 
     def _calibrate_lc(self):
-        n = 1000
+        n = 10000
         i = 0
-        self.readings = pd.DataFrame()
+        self.data = []
         
         while i <= n:
-            self.data = []
+            
             self.datum = self.hx.getValue()
             print(self.datum)
             self.data.append(self.datum)
             i += 1
         
-        self.readings['raw_reads'] = self.data
-        self.dmean = mean(self.data)
+        print('length of array ',len(self.data))
+        self.data_arry = array(self.data)
+        self.dmean = self.data_arry.mean()
         print('Mean : ', self.dmean)
-        self.dstd = std(self.data)
+        self.dstd = self.data_arry.std()
         print('St. Dev : ', self.dstd)
 
 
