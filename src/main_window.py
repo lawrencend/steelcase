@@ -201,10 +201,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Update the line edit text
         if status == 'update':
-            self._ui.status_line_edit.setFont(self._ui.status_line_edit.font().setPointSize(15))
+            f = self._ui.status_line_edit.font()
+            f.setPointSize(15)
+            self._ui.status_line_edit.setFont(f)
 
         else:
-            self._ui.status_line_edit.setFont(self._ui.status_line_edit.font().setPointSize(45))
+            f = self._ui.status_line_edit.font()
+            f.setPointSize(15)
+            self._ui.status_line_edit.setFont(f)
 
         self._ui.status_line_edit.setText(text_options[status])
 
