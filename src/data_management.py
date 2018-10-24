@@ -12,7 +12,7 @@ def add_test(test_df):
 
     day_summary_path = Path(str(current_output_path) + '/' + str(datetime.now().date()))
     
-    if os.path.isdir(day_summary_path) == False:
+    if day_summary_path.isdir() == False:
          os.mkdir(day_summary_path)   
     else:
         pass

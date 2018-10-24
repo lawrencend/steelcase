@@ -84,6 +84,7 @@ class TestControl(QObject):
             self.data.append(temp)
             self._stop()
 
+        self.value_updated.emit(self._load_cell.force)
 
     @pyqtSlot()
     def _stop(self):
