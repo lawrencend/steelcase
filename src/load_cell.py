@@ -89,7 +89,7 @@ class LoadCell(QObject):
         i = 0
         self.readings = pd.DataFrame()
         
-        while n <= i:
+        while i <= n:
             self.data = []
             self.datum = hx.getValue()
             self.data.append(self.datum)
