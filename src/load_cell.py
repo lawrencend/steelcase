@@ -92,6 +92,7 @@ class LoadCell(QObject):
         while i <= n:
             self.data = []
             self.datum = self.hx.getValue()
+            print(self.datum)
             self.data.append(self.datum)
             i += 1
         
