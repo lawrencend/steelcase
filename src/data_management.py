@@ -13,11 +13,11 @@ def add_test(test_df):
     day_summary_path = Path(str(current_output_path) + '/' + str(datetime.now().date()))
     
     if os.path.exists(str(day_summary_path)) == False:
-         os.mkdir(day_summary_path)   
+         os.mkdir(str(day_summary_path))   
     else:
         pass
     
-    summary_path = Path(str(day_summary_path) + r'/summary.csv')
+    summary_path = Path(str(day_summary_path) + '/summary.csv')
     test_path = Path(str(current_output_path) + '/' + str(datetime.now()) + '.csv')
 
     test_df.to_csv(test_path, index=False)
