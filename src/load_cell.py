@@ -4,6 +4,7 @@ from scipy.stats import linregress
 from hx711 import HX711
 import time
 from datetime import datetime
+import pandas as pd
 
 class LoadCell(QObject):
     """This class serves to house readings from the load cell...
