@@ -184,7 +184,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Create text options dictionary
         text_options = {}
         text_options.update({"running": "Running Test..."})
-        text_options.update({"update": "Running Test... \n Current force value = " + str(value)})
+        text_options.update({"update": "Running Test... Current force value = " + str(value)})
         text_options.update({"pass": "PASSED"})
         text_options.update({"fail": "FAILED"})
         text_options.update({"test_stopped": "Test stopped prematurely..."})
@@ -202,12 +202,12 @@ class MainWindow(QtWidgets.QMainWindow):
         # Update the line edit text
         if status == 'update':
             f = self._ui.status_line_edit.font()
-            f.setPointSize(15)
+            f.setPointSize(25)
             self._ui.status_line_edit.setFont(f)
 
         else:
             f = self._ui.status_line_edit.font()
-            f.setPointSize(15)
+            f.setPointSize(45)
             self._ui.status_line_edit.setFont(f)
 
         self._ui.status_line_edit.setText(text_options[status])
