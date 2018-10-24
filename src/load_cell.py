@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QObject, pyqtSignal
-from numpy import random
+from numpy import random, mean, std
 from scipy.stats import linregress
 from hx711 import HX711
 import time
@@ -97,9 +97,9 @@ class LoadCell(QObject):
             i += 1
         
         self.readings['raw_reads'] = self.data
-        self.dmean = np.mean(self.data)
+        self.dmean = mean(self.data)
         print('Mean : ',dmean)
-        self.dstd = np.std(self.data)
+        self.dstd = std(self.data)
         print('St. Dev : ',dstd)
 
 
