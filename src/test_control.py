@@ -21,7 +21,8 @@ class TestControl(QObject):
     """
 
     _pyfirmata = PyFirmataTeensy()
-    finished = pyqtSignal(DataFrame) 
+    finished = pyqtSignal(DataFrame)
+    value_updated = pyqtSignal(float)
 
     def __init__(self):
         """TestControl init method. """

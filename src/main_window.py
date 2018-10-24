@@ -17,6 +17,7 @@ from src.pw_dialog import PwDialog
 from src.test_control import TestControl
 # from src.pyfirmata_teensy import PyFirmataTeensy
 from src.data_management import add_test
+from src.calibration_routine import CalibrationRoutine
 
 class MainWindow(QtWidgets.QMainWindow):
     """ MainWindow class. This class is used to setup the GUI/
@@ -38,6 +39,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Connections
         self._ui.start_push_button.clicked.connect(self._start_button_clicked)
         self._ui.action_change_pass_fail_force_criteria.triggered.connect(self._start_cpfc)
+        # self._ui.action_enter_calibration_mode.triggered.connect(self._start_calibration_thread)
         # self._ui.action_change_password.triggered.connect(self._start_cpw)
         self._ui.action_change_output_path.triggered.connect(self._start_cop)
 
@@ -66,7 +68,7 @@ class MainWindow(QtWidgets.QMainWindow):
             not a thread is currently running and start/stop
             a thread as appropriate.
         """ 
-        # self._start_thread()
+        # self._start_test_thread()
         # See if self.thread is currently running
         if self._thread.isRunning():
 
@@ -80,9 +82,9 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
 
             # Start thread
-            self._start_thread()
+            self._start_test_thread()
 
-    def _start_thread(self):
+    def _start_test_thread(self):
         """ start_thread method. Used to create a new QThread instance,
             new Worker instance, connect signals/slots, and start the thread.
         """
@@ -98,10 +100,35 @@ class MainWindow(QtWidgets.QMainWindow):
         # Connect self.thread started() signal to self.update_button
         self._thread.started.connect(lambda: self._update_button("stop"))
 
+        # Connect self._test_control value_updated() to self._update_status
+        self._test_control.value_updated.connect(lambda value: self._update_status("update", value))
+
         # Connect self._test_control finished() signal to self._stop_test
         self._test_control.finished.connect(lambda test_df: self._stop_test(test_df))
 
         self._thread.start()
+
+    # def _start_calibration_thread(self):
+    #     """ start_thread method. Used to create a new QThread instance,
+    #         new Worker instance, connect signals/slots, and start the thread.
+    #     """
+    #     # self._thread.start()
+    #     self._test_control = TestControl()
+    #     self._thread = QtCore.QThread()
+    #     self._test_control.moveToThread(self._thread)
+    #     self._thread.started.connect(self._test_control.run)
+
+    #     # Connect self.thread started() signal to self.update_status
+    #     self._thread.started.connect(lambda: self._update_status("running"))
+
+    #     # Connect self.thread started() signal to self.update_button
+    #     self._thread.started.connect(lambda: self._update_button("stop"))
+
+    #     # Connect self._test_control finished() signal to self._stop_test
+    #     self._test_control.finished.connect(lambda test_df: self._stop_test(test_df))
+
+    #     self._thread.start()
+
 
     def _stop_thread(self):
 
@@ -149,7 +176,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # Update the push button text with the current status
         self._ui.start_push_button.setText(text_options[status])
   
-    def _update_status(self, status):
+    def _update_status(self, status, *value):
         """Method to update the status displayed on the dialog.
             Requires running/pass/fail status as a input.
         """
@@ -157,6 +184,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Create text options dictionary
         text_options = {}
         text_options.update({"running": "Running Test..."})
+        text_options.update({"update": "Running Test... \n Current force value = " + str(value)})
         text_options.update({"pass": "PASSED"})
         text_options.update({"fail": "FAILED"})
         text_options.update({"test_stopped": "Test stopped prematurely..."})
@@ -165,6 +193,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Create background colors dictionary
         bc_options = {}
         bc_options.update({"running": "background-color: rgb(255, 255, 255);"})
+        bc_options.update({"update": "background-color: rgb(255, 255, 255);"})
         bc_options.update({"pass": "background-color: rgb(0, 255, 0);"})
         bc_options.update({"fail": "background-color: rgb(255, 0, 0);"})
         bc_options.update({"test_stopped": "background-color: rgb(255, 85, 0);"})
