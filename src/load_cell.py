@@ -11,12 +11,14 @@ class LoadCell(QObject):
         Inherites from QtCore.QObject
     """
     
+    hx = HX711(5,6)
+
     def __init__(self):
         """ Load_cell init method """
 
         # Init parent classes
         super().__init__()
-        self.hx = HX711(5,6)
+
     
         #self..set_reading_format("LSB", "MSB") #monitor if strange readings change first to MSB
         #change this for right reference, converts volatge to force
@@ -24,7 +26,6 @@ class LoadCell(QObject):
         self.hx.reset()
 #        self.hx.tare() 
     
-
         # Attributes
         self.force = 0
         self._force_readings = list()
