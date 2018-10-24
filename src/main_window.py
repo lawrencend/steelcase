@@ -70,7 +70,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # See if self.thread is currently running
         if self._thread.isRunning():
 
-            self._thread._stop()
+            self._test_control._stop()
             # Stop it
             self._stop_thread()
             self._update_status("test_stopped")
