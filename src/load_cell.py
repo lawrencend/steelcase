@@ -99,3 +99,9 @@ class LoadCell(QObject):
         print('Mean : ',dmean)
         self.dstd = np.std(self.data)
         print('St. Dev : ',dstd)
+
+
+if __name__ == '__main__':
+
+    o = LoadCell()
+    o._calibrate_lc()
