@@ -98,9 +98,9 @@ class LoadCell(QObject):
         
         self.readings['raw_reads'] = self.data
         self.dmean = mean(self.data)
-        print('Mean : ',dmean)
+        print('Mean : ', self.dmean)
         self.dstd = std(self.data)
-        print('St. Dev : ',dstd)
+        print('St. Dev : ', self.dstd)
 
 
 if __name__ == '__main__':
