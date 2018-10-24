@@ -10,13 +10,6 @@ class LoadCell(QObject):
         Inherites from QtCore.QObject
     """
     
-    hx = HX711(5,6)
-    
-    hx.set_reading_format("LSB", "MSB") #monitor if strange readings change first to MSB
-    #change this for right reference, converts volatge to force
-    hx.set_reference_unit(92)
-    hx.reset()
-    hx.tare() 
     
     
     def __init__(self):
@@ -24,6 +17,14 @@ class LoadCell(QObject):
 
         # Init parent classes
         super().__init__()
+        self.hx = HX711(5,6)
+    
+        #self..set_reading_format("LSB", "MSB") #monitor if strange readings change first to MSB
+        #change this for right reference, converts volatge to force
+        #self..set_reference_unit(92)
+        self.hx.reset()
+#        self.hx.tare() 
+    
 
         # Attributes
         self.force = 0
@@ -37,25 +38,26 @@ class LoadCell(QObject):
         """ update method to update the load_cell/ associated
             calcs... more later.
         """
-        self._load_cell.raw_load_cell_value = hx.get_weight(5)
-        
-        hx.power_down()
-        hx.power_up()
+        self.raw_load_cell_value = self.hx.getValue() #self..getWeight(5)
+        print('load cell val: ', self.raw_load_cell_value)
+
+        self.hx.powerDown()
+        self.hx.powerUp()
 #        time.sleep(0.05)
         
         correction= 2.5#uncomment if give mv#*10**3 #   lb/volt for lbs maybe, but through amplifier what are we getting
-        self.force = correction*raw_load_cell_value
+        self.force = correction*self.raw_load_cell_value
 
 
         self._check_for_failure(time)
 
         if self.force >= self.current_pfc and self.test_status == 'RUNNING':
 
-            self.continue_test = False
+            self.continue_test = True
             self.test_status = 'PASSED'
 
         elif self.test_status == 'FAILED':
-            self.continue_test = False
+            self.continue_test = True
 
         elif self.test_status == 'RUNNING':
             self.continue_test = True

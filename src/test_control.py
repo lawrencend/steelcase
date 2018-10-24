@@ -53,7 +53,7 @@ class TestControl(QObject):
         # self._load_cell.finished.connect(self._stop)
 
         # Start the timer
-        self._timer.start(50) # 50 ms / 20 hz. Placeholder value.
+        self._timer.start(100) # / 20 hz. Placeholder value.
 
     @pyqtSlot()
     def _work(self):
