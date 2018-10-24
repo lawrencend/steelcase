@@ -73,6 +73,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # Stop it
             self._stop_thread()
             self._update_status("test_stopped")
+            self._update_button("start")
 
         # Else start a new thread
         else:
