@@ -70,9 +70,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # See if self.thread is currently running
         if self._thread.isRunning():
 
-            self._test_control._stop()
             # Stop it
-            self._stop_thread()
+            self._test_control._stop()
+            # self._stop_thread()
             self._update_status("test_stopped")
             self._update_button("start")
 
@@ -116,6 +116,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def _stop_test(self, test_df):
         """ Method to quit a thread once the worker has finished. """
 
+        print('calling stop test')
         self._stop_thread()
 
         test_result = test_df['test_status'].tail(1).values[0]
