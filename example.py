@@ -26,7 +26,7 @@ readings = []
 while len(readings) <= i:
 
     try:
-        val = hx.getValue()
+        val = hx.getWeight()
         #time.sleep(2)
         readings.append(val)
         print("{0: 4.4f}".format(val))
