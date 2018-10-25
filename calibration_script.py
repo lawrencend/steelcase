@@ -49,9 +49,9 @@ for i in range(number_of_weights):
 		values.append(val)
 		print('current val: ', val, i)		
 
-	mean = mean(values)
+	mean_val = mean(values)
 
-	reference_calcs.append(mean/weight)
+	reference_calcs.append(mean_val/weight)
 
 print('reference weight is', mean(reference_calcs))	
 sys.exit()
