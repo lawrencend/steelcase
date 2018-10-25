@@ -12,7 +12,9 @@ class LoadCell(QObject):
     """
     
     hx = HX711(5,6)
-
+    hx.setReferenceUnit(1000)
+    hx.tare()  
+    
     def __init__(self):
         """ Load_cell init method """
 
@@ -22,9 +24,9 @@ class LoadCell(QObject):
     
         #self..set_reading_format("LSB", "MSB") #monitor if strange readings change first to MSB
         #change this for right reference, converts volatge to force
-        #self..set_reference_unit(92)
+
         self.hx.reset()
-#        self.hx.tare() 
+        self.hx.tare() 
     
         # Attributes
         self.force = 0
@@ -86,13 +88,25 @@ class LoadCell(QObject):
             self.test_status = 'RUNNING'
 
     def _calibrate_lc(self):
-        n = 10000
+
+
+
+
+       n = 10
         i = 0
         self.data = []
+        #self.hx.tare()
+       
         
         while i <= n:
             
-            self.datum = self.hx.getValue()
+            self.datum1 = self.hx.getWeight()
+            self.datum2 = self.hx.getWeight()
+            self.datum3 = self.hx.getWeight()
+            self.datum4 = self.hx.getWeight()
+            self.datum5 = self.hx.getWeight()
+            self.datum = (self.datum1+self.datum2+self.datum3+self.datum4+self.datum5)/5 
+            
             print(self.datum)
             self.data.append(self.datum)
             i += 1
@@ -103,7 +117,7 @@ class LoadCell(QObject):
         print('Mean : ', self.dmean)
         self.dstd = self.data_arry.std()
         print('St. Dev : ', self.dstd)
-
+	
 
 if __name__ == '__main__':
 
