@@ -24,7 +24,7 @@ hx.OFFSET = 0
 print('wait while I zero...')
 
 zero_values = list()
-for i in range(10):
+for i in range(1000):
 
 	val = hx.getWeight()
 	zero_values.append(val)
@@ -43,7 +43,7 @@ for i in range(number_of_weights):
 
 
 	values = list()
-	for i in range(10):
+	for i in range(1000):
 
 		val = hx.getWeight()
 		values.append(val)
