@@ -35,7 +35,7 @@ hx.OFFSET = zero_mean
 number_of_weights = input('\n\n\nEnter the number of weights to use for calibration:')
 
 
-reference_calcs = list():
+reference_calcs = list()
 for i in range(number_of_weights):
 
 	weight = input('\n\n\nEnter weight for this test:')
