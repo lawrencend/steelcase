@@ -49,7 +49,7 @@ for i in range(number_of_weights):
 		values.append(val)
 		print('current val: ', val, i)		
 
-	mean = mean(zero_values)
+	mean = mean(values)
 
 	reference_calcs.append(mean/weight)
 
