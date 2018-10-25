@@ -13,7 +13,7 @@ hx = HX711(dout=5, pd_sck=6)
 # Call get_weight before and after putting 1000g weight on your sensor.
 # Divide difference with grams (1000g) and use it as refference unit.
 
-hx.setReferenceUnit(1)
+hx.setReferenceUnit(-93248.266)
 hx.OFFSET = 0
 
 
