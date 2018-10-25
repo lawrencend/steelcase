@@ -27,7 +27,7 @@ for i in range(1000):
 
 	val = hx.getWeight()
 	zero_values.append(val)
-	print('current val: '. val)
+	print('current val: ', val)
 
 zero_mean = mean(zero_values)
 hx.OFFSET = zero_mean
