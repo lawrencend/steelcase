@@ -74,9 +74,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
             # Stop it
             self._test_control._stop()
+
             # self._stop_thread()
-            self._update_status("test_stopped")
-            self._update_button("start")
+            # self._update_status("test_stopped")
+            # self._update_button("start")
 
         # Else start a new thread
         else:
@@ -155,6 +156,8 @@ class MainWindow(QtWidgets.QMainWindow):
         elif test_result == 'FAILED':
             self._update_status('fail')
 
+        elif test_result == 'RUNNING':
+            self._update_status('test_stopped')
 
         self._update_button('start')
         # print(test_df)
