@@ -46,7 +46,7 @@ for i in range(number_of_weights):
 
 		val = hx.getWeight()
 		values.append(val)
-		print('current val: '. val)		
+		print('current val: ', val)		
 
 	mean = mean(zero_values)
 
