@@ -33,13 +33,13 @@ for i in range(1000):
 zero_mean = mean(zero_values)
 hx.OFFSET = zero_mean
 
-number_of_weights = input('\n\n\nEnter the number of weights to use for calibration:')
+number_of_weights = int(input('\n\n\nEnter the number of weights to use for calibration:'))
 
 
 reference_calcs = list()
 for i in range(number_of_weights):
 
-	weight = input('\n\n\nEnter weight for this test:')
+	weight = float(input('\n\n\nEnter weight for this test:'))
 
 
 	values = list()
