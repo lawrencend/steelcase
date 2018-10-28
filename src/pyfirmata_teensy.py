@@ -57,7 +57,7 @@ class PyFirmataTeensy:
 
 			# print('if because servo>full retract')
 		else:
-			self.continue_test = True
+			self.continue_test = False
 			self._servo_current_pos = self._servo_fully_retracted_pos
 
 	def fully_extend_servo(self):
