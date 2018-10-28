@@ -72,7 +72,7 @@ class LoadCell(QObject):
 
             self._time_stamps.append(time)
 
-            if len(self._force_readings) > 5:
+            if len(self._force_readings) > 5 and self.force >0.5:
 
                 self._force_readings.pop(0)
                 self._time_stamps.pop(0)
