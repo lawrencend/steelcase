@@ -53,6 +53,9 @@ class TestControl(QObject):
         # self._timer.finished.connect(self._stop)
         # self._load_cell.finished.connect(self._stop)
 
+        self._load_cell.hx.tare()
+
+
         # Start the timer
         self._timer.start(100) # / 10 hz. Placeholder value.
 
