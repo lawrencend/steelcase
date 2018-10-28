@@ -68,7 +68,7 @@ class LoadCell(QObject):
 
         if len(self._force_readings) > 0:
 
-            if len(self._force_readings) > 15:
+            if len(self._force_readings) > 5:
 
                 self._force_readings.pop(0)
                 self._force_readings.append(self.force)

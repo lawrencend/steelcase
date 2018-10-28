@@ -187,7 +187,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Create text options dictionary
         text_options = {}
         text_options.update({"running": "Running Test..."})
-        text_options.update({"update": "Running Test... Current force value = " + str(value)})
+        text_options.update({"update": "Running Test... CFV = " + str(value[0])})
         text_options.update({"pass": "PASSED"})
         text_options.update({"fail": "FAILED"})
         text_options.update({"test_stopped": "Test stopped prematurely..."})
