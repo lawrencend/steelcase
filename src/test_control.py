@@ -71,7 +71,7 @@ class TestControl(QObject):
 
         self._load_cell.update(current_time)
 
-        if self._load_cell.continue_test:
+        if self._load_cell.continue_test and self._pyfirmata.continue_test:
             self._pyfirmata.increment_retract_servo()
             servo_command_sent = 'increment_retract'
             temp = [current_datetime, current_time, self._load_cell.force, self._load_cell.raw_load_cell_value,

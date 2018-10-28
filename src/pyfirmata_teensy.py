@@ -9,6 +9,8 @@ class PyFirmataTeensy:
 
 		self._board = pyfirmata.util.get_the_board(base_dir='/dev/serial/by-id/', identifier='usb-')
 		
+		self.continue_test = True
+
 		# Attributes
 		self._servo_max = 180 # mirco-s
 		self._servo_min = 0# mirco-s
@@ -40,21 +42,22 @@ class PyFirmataTeensy:
 	# 	return self._load_cell.read()
 
 	def get_servo_pos(self):
-		print('get servo pos fn :', self._servo_current_pos - self._servo_fully_extended_pos)*self._servo_pos_degrees_to_inches		
+		# print('get servo pos fn :', self._servo_current_pos - self._servo_fully_extended_pos)*self._servo_pos_degrees_to_inches		
 		return (self._servo_current_pos - self._servo_fully_extended_pos)*self._servo_pos_degrees_to_inches
 
 	def increment_retract_servo(self):
-		print('servo curr pos before : ',self._servo_current_pos) 
+		# print('servo curr pos before : ',self._servo_current_pos) 
 		self._servo_current_pos -= 1
-		print('servo curr pos after: ',self._servo_current_pos)
+		# print('servo curr pos after: ',self._servo_current_pos)
 
-		print(self._servo_current_pos, self._servo_fully_retracted_pos)
+		# print(self._servo_current_pos, self._servo_fully_retracted_pos)
 		if self._servo_current_pos >= self._servo_fully_retracted_pos:
 			self._servo.write(self._servo_current_pos)
-			print('if because servo>full retract')
-			pass 
+			self.continue_test = True
+
+			# print('if because servo>full retract')
 		else:
-			print('else')
+			self.continue_test = False
 			self._servo_current_pos = self._servo_fully_retracted_pos
 
 	def fully_extend_servo(self):
@@ -62,10 +65,14 @@ class PyFirmataTeensy:
 		self._servo_current_pos = self._servo_fully_extended_pos
 		#self._servo.write(self._servo_current_pos)
 		self._servo.write(self._servo_current_pos)
+		self.continue_test = True
+
 	def fully_retract_servo(self):
 
 		self._servo_current_pos = self._servo_fully_retracted_pos
 		self._servo.write(self._servo_current_pos)
+		self.continue_test = True
+
 
 if __name__ == "__main__":
 
