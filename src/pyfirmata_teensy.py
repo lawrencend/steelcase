@@ -48,16 +48,16 @@ class PyFirmataTeensy:
 	def increment_retract_servo(self):
 		# print('servo curr pos before : ',self._servo_current_pos) 
 		self._servo_current_pos -= 1
-		# print('servo curr pos after: ',self._servo_current_pos)
+		print('servo curr pos after: ',self._servo_current_pos, self._servo_fully_retracted_pos)
 
 		# print(self._servo_current_pos, self._servo_fully_retracted_pos)
 		if self._servo_current_pos >= self._servo_fully_retracted_pos:
 			self._servo.write(self._servo_current_pos)
-			self.continue_test = False
+			self.continue_test = True
 
 			# print('if because servo>full retract')
 		else:
-			self.continue_test = False
+			self.continue_test = True
 			self._servo_current_pos = self._servo_fully_retracted_pos
 
 	def fully_extend_servo(self):
