@@ -78,7 +78,7 @@ class TestControl(QObject):
                     servo_command_sent, self._load_cell.current_pfc, self._load_cell.test_status]
 
             self.data.append(temp)
-            self.value_updated.emit(self._load_cell.force)
+            # self.value_updated.emit(self._load_cell.force)
 
         else:
             servo_command_sent = None
