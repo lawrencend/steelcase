@@ -77,6 +77,7 @@ class LoadCell(QObject):
                 self._time_stamps.append(time)
 
             slope = linregress(self._force_readings, self._time_stamps)[0]
+            print(slope)
 
             if slope < 0:
                 self.test_status = 'FAILED'
