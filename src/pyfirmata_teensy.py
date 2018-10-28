@@ -53,7 +53,7 @@ class PyFirmataTeensy:
 		# print(self._servo_current_pos, self._servo_fully_retracted_pos)
 		if self._servo_current_pos >= self._servo_fully_retracted_pos:
 			self._servo.write(self._servo_current_pos)
-			self.continue_test = True
+			self.continue_test = False
 
 			# print('if because servo>full retract')
 		else:
