@@ -87,36 +87,36 @@ class LoadCell(QObject):
         else:
             self.test_status = 'RUNNING'
 
-    def _calibrate_lc(self):
+    # def _calibrate_lc(self):
 
 
 
 
-       n = 10
-        i = 0
-        self.data = []
-        #self.hx.tare()
+    #     n = 10
+    #     i = 0
+    #     self.data = []
+    #     #self.hx.tare()
        
         
-        while i <= n:
+    #     while i <= n:
             
-            self.datum1 = self.hx.getWeight()
-            self.datum2 = self.hx.getWeight()
-            self.datum3 = self.hx.getWeight()
-            self.datum4 = self.hx.getWeight()
-            self.datum5 = self.hx.getWeight()
-            self.datum = (self.datum1+self.datum2+self.datum3+self.datum4+self.datum5)/5 
+    #         self.datum1 = self.hx.getWeight()
+    #         self.datum2 = self.hx.getWeight()
+    #         self.datum3 = self.hx.getWeight()
+    #         self.datum4 = self.hx.getWeight()
+    #         self.datum5 = self.hx.getWeight()
+    #         self.datum = (self.datum1+self.datum2+self.datum3+self.datum4+self.datum5)/5 
             
-            print(self.datum)
-            self.data.append(self.datum)
-            i += 1
+    #         print(self.datum)
+    #         self.data.append(self.datum)
+    #         i += 1
         
-        print('length of array ',len(self.data))
-        self.data_arry = array(self.data)
-        self.dmean = self.data_arry.mean()
-        print('Mean : ', self.dmean)
-        self.dstd = self.data_arry.std()
-        print('St. Dev : ', self.dstd)
+    #     print('length of array ',len(self.data))
+    #     self.data_arry = array(self.data)
+    #     self.dmean = self.data_arry.mean()
+    #     print('Mean : ', self.dmean)
+    #     self.dstd = self.data_arry.std()
+    #     print('St. Dev : ', self.dstd)
 	
 
 if __name__ == '__main__':
