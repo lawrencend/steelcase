@@ -71,10 +71,11 @@ class LoadCell(QObject):
             if len(self._force_readings) > 5:
 
                 self._force_readings.pop(0)
-                self._force_readings.append(self.force)
-
                 self._time_stamps.pop(0)
-                self._time_stamps.append(time)
+        
+            self._force_readings.append(self.force)
+
+            self._time_stamps.append(time)
 
             slope = linregress(self._force_readings, self._time_stamps)[0]
             print(slope)
@@ -86,8 +87,11 @@ class LoadCell(QObject):
                 self.test_status = 'RUNNING'
 
         else:
-            self.test_status = 'RUNNING'
 
+            self.test_status = 'RUNNING'
+            self._force_readings.append(self.force)
+
+            self._time_stamps.append(time)
     # def _calibrate_lc(self):
 
 
