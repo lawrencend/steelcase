@@ -184,11 +184,16 @@ class MainWindow(QtWidgets.QMainWindow):
             Requires running/pass/fail status as a input.
         """
 
-        print(value)
+        # print(value)
         # Create text options dictionary
         text_options = {}
         text_options.update({"running": "Running Test..."})
-        text_options.update({"update": "Running Test... CFV = " + str(value[0])})
+
+        if value is not None and len(value)>0:
+            text_options.update({"update": "Running Test... CFV = " + str(value[0])})
+        else:
+            text_options.update({"update": "Running Test..."})
+
         text_options.update({"pass": "PASSED"})
         text_options.update({"fail": "FAILED"})
         text_options.update({"test_stopped": "Test stopped prematurely..."})
