@@ -67,7 +67,7 @@ class TestControl(QObject):
 
 #        raw_load_cell_value = self._pyfirmata.read_load_cell() #
         current_datetime = datetime.now()
-        current_time = datetime.now().time()
+        current_time = float(datetime.now().time())
 
         self._load_cell.update(current_time)
 
