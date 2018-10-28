@@ -12,7 +12,8 @@ class LoadCell(QObject):
     """
     
     hx = HX711(5,6)
-    hx.setReferenceUnit(-91557.4896)
+    # hx.setReferenceUnit(-91557.4896) # done using 1000 readings at 5,10,20lbs
+    hx.setReferenceUnit(-83800.616467)
     hx.tare()  
     
     def __init__(self):
