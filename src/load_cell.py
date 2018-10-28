@@ -40,7 +40,7 @@ class LoadCell(QObject):
         """ update method to update the load_cell/ associated
             calcs... more later.
         """
-        self.raw_load_cell_value = self.hx.getValue() #self..getWeight(5)
+        self.raw_load_cell_value = self.hx.getWeight() #self..getWeight(5)
         print('load cell val: ', self.raw_load_cell_value)
 
         self.hx.powerDown()
