@@ -67,24 +67,24 @@ class LoadCell(QObject):
     def _check_for_failure(self, time):
 
         if len(self._force_readings) > 0:
-
-            if len(self._force_readings) > 5:
-
-                self._force_readings.pop(0)
-                self._time_stamps.pop(0)
         
             self._force_readings.append(self.force)
 
             self._time_stamps.append(time)
 
-            slope = linregress(self._force_readings, self._time_stamps)[0]
-            print(slope)
+            if len(self._force_readings) > 5:
 
-            if slope < 0:
-                self.test_status = 'FAILED'
+                self._force_readings.pop(0)
+                self._time_stamps.pop(0)
 
-            elif slope >= 0:
-                self.test_status = 'RUNNING'
+                slope = linregress(self._force_readings, self._time_stamps)[0]
+                print(slope)
+
+                if slope < 0:
+                    self.test_status = 'FAILED'
+
+                elif slope >= 0:
+                    self.test_status = 'RUNNING'
 
         else:
 
