@@ -57,7 +57,7 @@ class TestControl(QObject):
 
 
         # Start the timer
-        self._timer.start(100) # / 10 hz. Placeholder value.
+        self._timer.start(50) # / 10 hz. Placeholder value.
 
     @pyqtSlot()
     def _work(self):

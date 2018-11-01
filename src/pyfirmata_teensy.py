@@ -15,7 +15,7 @@ class PyFirmataTeensy:
 		self._servo_max = 180 # mirco-s
 		self._servo_min = 0# mirco-s
 		self._servo_fully_retracted_pos = 49#2000 # degrees
-		self._servo_fully_extended_pos = 135#180 # degrees
+		self._servo_fully_extended_pos = 130#180 # degrees
 		self._servo_current_pos = 135
 		self._servo_pos_degrees_to_inches = 4/(self._servo_fully_retracted_pos - self._servo_fully_extended_pos) # inch/degree
 
