@@ -18,7 +18,7 @@ def add_test(test_df):
         pass
     
     summary_path = Path(str(day_summary_path) + '/summary.csv')
-    test_path = Path(str(current_output_path) + '/' + str(day_summary_path) + '/' +  str(datetime.now()) + '.csv')
+    test_path = Path(str(day_summary_path) + '/' +  str(datetime.now()) + '.csv')
 
     test_df.to_csv(test_path, index=False)
 
