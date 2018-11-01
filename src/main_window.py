@@ -96,10 +96,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self._thread.started.connect(self._test_control.run)
 
         # Connect self.thread started() signal to self.update_status
-        self._thread.started.connect(lambda: self._update_status("running"))
+        self._update_status("running")
+        self._update_button("stop")
+        # self._thread.started.connect(lambda: self._update_status("running"))
 
         # Connect self.thread started() signal to self.update_button
-        self._thread.started.connect(lambda: self._update_button("stop"))
+        # self._thread.started.connect(lambda: self._update_button("stop"))
 
         # Connect self._test_control value_updated() to self._update_status
         self._test_control.value_updated.connect(lambda value: self._update_status("update", value))
