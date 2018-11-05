@@ -102,7 +102,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._thread.started.connect(self._test_control.run)
 
         # Connect self.thread started() signal to self.update_status
-        self._update_status("running")
+        # self._update_status("running")
         self._update_button("stop")
         self._test_id = datetime.now()
         self._ui.test_id_line_edit.setText(str(self._test_id))
@@ -112,6 +112,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # self._thread.started.connect(lambda: self._update_button("stop"))
 
         # Connect self._test_control value_updated() to self._update_status
+
+        self._test_control.running.connect(lambda value: self._update_status("running", value))
         self._test_control.value_updated.connect(lambda value: self._update_status("update", value))
         self._test_control.taring_scale.connect(lambda value: self._update_status("taring", value))
 

@@ -18,9 +18,9 @@ def add_test(test_df, test_id):
         pass
     
     summary_path = Path(str(day_summary_path) + '/summary.csv')
-    test_path = Path(str(day_summary_path) + '/' + test_id + '.csv')
+    test_path = Path(str(day_summary_path) + '/' + str(test_id) + '.csv')
 
-    test_df['test_id'] = test_id
+    test_df['test_id'] = str(test_id)
 
     test_df.to_csv(test_path, index=False)
 

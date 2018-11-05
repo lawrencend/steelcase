@@ -24,6 +24,7 @@ class TestControl(QObject):
     finished = pyqtSignal(DataFrame)
     value_updated = pyqtSignal(float)
     taring_scale = pyqtSignal(int)
+    running = pyqtSignal(int)
 
     def __init__(self):
         """TestControl init method. """
@@ -59,7 +60,7 @@ class TestControl(QObject):
 
         self.taring_scale.emit(1)
         self._load_cell.hx.tare()
-
+        self.running.emit(1)
 
         # Start the timer
         self._timer.start(50) # / 10 hz. Placeholder value.
