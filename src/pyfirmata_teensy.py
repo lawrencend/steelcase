@@ -48,7 +48,6 @@ class PyFirmataTeensy:
 	def increment_retract_servo(self):
 		# print('servo curr pos before : ',self._servo_current_pos) 
 		self._servo_current_pos -= 1
-		print('servo curr pos after: ',self._servo_current_pos, self._servo_fully_retracted_pos)
 
 		# print(self._servo_current_pos, self._servo_fully_retracted_pos)
 		if self._servo_current_pos >= self._servo_fully_retracted_pos:

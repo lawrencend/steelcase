@@ -58,10 +58,12 @@ class TestControl(QObject):
         # self._timer.finished.connect(self._stop)
         # self._load_cell.finished.connect(self._stop)
 
+        self._pyfirmata.fully_retract_servo()
+
         self.taring_scale.emit(1)
         self._load_cell.hx.tare()
-        self.running.emit(1)
 
+        self.running.emit(1)
         # Start the timer
         self._timer.start(50) # / 10 hz. Placeholder value.
 
