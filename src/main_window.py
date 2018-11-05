@@ -105,7 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._update_status("running")
         self._update_button("stop")
         self._test_id = datetime.now()
-        self._ui.test_id_line_edit.setText(self.test_id)
+        self._ui.test_id_line_edit.setText(self._test_id)
         # self._thread.started.connect(lambda: self._update_status("running"))
 
         # Connect self.thread started() signal to self.update_button
