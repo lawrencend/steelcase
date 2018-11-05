@@ -167,7 +167,7 @@ class MainWindow(QtWidgets.QMainWindow):
         elif test_result == 'FAILED':
             self._update_status('fail')
 
-        elif test_result == 'RUNNING':
+        elif test_result == 'RUNNING' or test_result == 'waiting:
             self._update_status('test_stopped')
 
         self._update_button('start')
