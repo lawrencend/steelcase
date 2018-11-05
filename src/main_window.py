@@ -1,6 +1,8 @@
 
 from pathlib import Path
 import time
+from datetime import datetime
+
 
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import QThread
@@ -89,6 +91,10 @@ class MainWindow(QtWidgets.QMainWindow):
         """ start_thread method. Used to create a new QThread instance,
             new Worker instance, connect signals/slots, and start the thread.
         """
+
+
+
+
         # self._thread.start()
         self._test_control = TestControl()
         self._thread = QtCore.QThread()
@@ -98,6 +104,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # Connect self.thread started() signal to self.update_status
         self._update_status("running")
         self._update_button("stop")
+        self._test_id = datetime.now()
+        self._ui.test_id_line_edit.setText(self.test_id)
         # self._thread.started.connect(lambda: self._update_status("running"))
 
         # Connect self.thread started() signal to self.update_button
@@ -105,6 +113,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Connect self._test_control value_updated() to self._update_status
         self._test_control.value_updated.connect(lambda value: self._update_status("update", value))
+        self._test_control.taring_scale.connect(lambda value: self._update_status("taring", value))
 
         # Connect self._test_control finished() signal to self._stop_test
         self._test_control.finished.connect(lambda test_df: self._stop_test(test_df))
@@ -146,11 +155,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def _stop_test(self, test_df):
         """ Method to quit a thread once the worker has finished. """
 
-        print('calling stop test')
         self._stop_thread()
 
         test_result = test_df['test_status'].tail(1).values[0]
-        print(test_result)
 
         if test_result == 'PASSED':
             self._update_status('pass')
@@ -166,7 +173,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Complete the test by logging data
         # self.data_man.complete_test()
 
-        add_test(test_df)
+        add_test(test_df, self._test_id)
     
     def _update_button(self, status):
         """ Method to update the push button. Requires "status" as
@@ -196,6 +203,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             text_options.update({"update": "Running Test..."})
 
+        text_options.update({"taring": "Taring Scale, Wait..."})
         text_options.update({"pass": "PASSED"})
         text_options.update({"fail": "FAILED"})
         text_options.update({"test_stopped": "Test stopped prematurely..."})
@@ -205,6 +213,7 @@ class MainWindow(QtWidgets.QMainWindow):
         bc_options = {}
         bc_options.update({"running": "background-color: rgb(255, 255, 255);"})
         bc_options.update({"update": "background-color: rgb(255, 255, 255);"})
+        bc_options.update({"taring": "background-color: rgb(255, 255, 255);"})
         bc_options.update({"pass": "background-color: rgb(0, 255, 0);"})
         bc_options.update({"fail": "background-color: rgb(255, 0, 0);"})
         bc_options.update({"test_stopped": "background-color: rgb(255, 85, 0);"})

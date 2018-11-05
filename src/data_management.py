@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 
-def add_test(test_df):
+def add_test(test_df, test_id):
 
     with open(".steelcase_path", "r") as file:
         # Read the current path
@@ -18,7 +18,9 @@ def add_test(test_df):
         pass
     
     summary_path = Path(str(day_summary_path) + '/summary.csv')
-    test_path = Path(str(day_summary_path) + '/' +  str(datetime.now()) + '.csv')
+    test_path = Path(str(day_summary_path) + '/' + test_id + '.csv')
+
+    test_df['test_id'] = test_id
 
     test_df.to_csv(test_path, index=False)
 

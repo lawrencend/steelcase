@@ -1,0 +1,1 @@
+rm .configured .steelcase_path .steelcase_pfc .steelcase_pw

@@ -23,6 +23,7 @@ class TestControl(QObject):
     _pyfirmata = PyFirmataTeensy()
     finished = pyqtSignal(DataFrame)
     value_updated = pyqtSignal(float)
+    taring_scale = pyqtSignal(int)
 
     def __init__(self):
         """TestControl init method. """
@@ -39,6 +40,9 @@ class TestControl(QObject):
     
         self.data = list()
 
+        self.data.append(['waiting', 'waiting', 'waiting', 'waiting',
+                        'waiting', 'waiting', 'waiting'])
+
     @pyqtSlot()
     def run(self):
         """ Run slot. Used to execute processes at a fixed
@@ -53,6 +57,7 @@ class TestControl(QObject):
         # self._timer.finished.connect(self._stop)
         # self._load_cell.finished.connect(self._stop)
 
+        self.taring_scale.emit(1)
         self._load_cell.hx.tare()
 
 

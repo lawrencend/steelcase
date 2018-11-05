@@ -180,7 +180,6 @@
      <string>Settings</string>
     </property>
     <addaction name="action_change_pass_fail_force_criteria"/>
-    <addaction name="action_enter_calibration_mode"/>
     <addaction name="action_change_output_path"/>
     <addaction name="action_change_Password"/>
    </widget>
