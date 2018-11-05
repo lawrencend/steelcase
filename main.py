@@ -1,3 +1,4 @@
+#!/usr/bin/python3 
 """
 	Written by: Nathan Lawrence
 	On: 7/21/2018
