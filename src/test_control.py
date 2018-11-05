@@ -1,7 +1,7 @@
 """
     Written by: Nathan Lawrence
     On: 3/16/2016
-    Email: Nathan@LawrenceAerospace.com
+    Email: ndl0005@uah.edu
 
     This module provides a class, TestControl, to manage the execution
     of a test.

@@ -1,7 +1,7 @@
 """
     Written by: Nathan Lawrence
     On: 3/17/2018
-    Email: Nathan@LawrenceAerospace.com
+    Email: ndl0005@uah.edu
 
     This module provides a class, Cop_dialog, to change the output path.
 """

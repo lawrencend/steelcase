@@ -1,7 +1,7 @@
 """
     Written by: Nathan Lawrence
     On: 3/16/2018
-    Email: Nathan@LawrenceAerospace.com
+    Email: ndl0005@uah.edu
 
     This module provides a class, CpwDialog, to manage changing user
     passwords.

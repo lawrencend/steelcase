@@ -42,7 +42,7 @@ class LoadCell(QObject):
             calcs... more later.
         """
         self.raw_load_cell_value = self.hx.getWeight() #self..getWeight(5)
-        print('load cell val: ', self.raw_load_cell_value)
+        # print('load cell val: ', self.raw_load_cell_value)
 
         self.hx.powerDown()
         self.hx.powerUp()

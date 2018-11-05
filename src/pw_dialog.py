@@ -1,7 +1,7 @@
 """
     Written by: Nathan Lawrence
     On: 3/18/2018
-    Email: Nathan@LawrenceAerospace.com
+    Email: ndl0005@uah.edu
 
     This module provides a class, Pw_dialog, to create !@#
 """
