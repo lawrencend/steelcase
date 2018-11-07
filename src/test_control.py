@@ -58,7 +58,7 @@ class TestControl(QObject):
         # self._timer.finished.connect(self._stop)
         # self._load_cell.finished.connect(self._stop)
 
-        self._pyfirmata.fully_retract_servo()
+        self._pyfirmata.fully_extend_servo()
 
         self.taring_scale.emit(1)
         self._load_cell.hx.tare()
